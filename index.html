@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Comparison Tool</title>
+    <style>
+        :root {
+            --primary-color: #57068c; /* NYU Violet */
+            --primary-dark: #330662; /* Darker NYU Violet */
+            --primary-gradient: linear-gradient(135deg, #57068c 0%, #330662 100%);
+            --secondary-color: #f8f9fa; /* Light gray */
+            --text-color: #333;
+            --border-color: #e0e0e0;
+            --success-bg: #d4edda;
+            --success-text: #155724;
+            --delete-bg: #f8d7da;
+            --delete-text: #721c24;
+            --shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+            --border-radius: 12px;
+            --border-radius-sm: 8px;
+            --accent-light: #9c6fb6; /* Light purple accent */
+            --accent-lighter: #e5e1ea; /* Very light purple */
+            --transition-standard: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --card-border: 1px solid rgba(230, 230, 240, 0.7);
+            --font-primary: 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: var(--font-primary);
+            background: #f0ecf8; /* More saturated purple background */
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 30px 20px 80px;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            color: var(--primary-dark);
+            margin-bottom: 1.2rem;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--accent-lighter);
+            font-weight: 600;
+            letter-spacing: -0.01em;
+        }
+        
+        /* Header styles */
+        .header {
+            background-color: white;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 16px 30px;
+            display: flex;
+            justify-content: space-between; /* This should position things correctly */
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo-container {
+            height: 56px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-container img {
+            height: 100%;
+            max-width: 300px;
+        }
+        
+        .about-btn {
+            background-color: white;
+            color: var(--primary-color); /* This should make text visible */
+            border: 2px solid var(--primary-color);
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-standard);
+            margin-left: auto; /* Force it to the right */
+        }
+        
+        .about-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(87, 6, 140, 0.3);
+        }
+        
+        .upload-section {
+            background-color: white;
+            margin-bottom: 50px;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: var(--transition-standard);
+            border: var(--card-border);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .upload-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--primary-gradient);
+        }
+        
+        .upload-section:hover {
+            box-shadow: 0 15px 35px rgba(87, 6, 140, 0.15);
+            transform: translateY(-3px);
+        }
+        
+        .file-input-container {
+            margin-bottom: 28px;
+            position: relative;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #444;
+            font-size: 1.05rem;
+        }
+        
+        input[type="file"] {
+            display: block;
+            width: 100%;
+            padding: 16px 20px;
+            background-color: #f5f5fa;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transition-standard);
+            cursor: pointer;
+        }
+        
+        input[type="file"]:hover {
+            border-color: #ccc;
+            background-color: #f0eef8;
+        }
+        
+        input[type="file"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(87, 6, 140, 0.1);
+        }
+        
+        button {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-standard);
+            margin: 28px auto 0;
+            display: block;
+            box-shadow: 0 4px 15px rgba(87, 6, 140, 0.25);
+        }
+        
+        button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(87, 6, 140, 0.35);
+        }
+        
+        button:active {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(87, 6, 140, 0.3);
+        }
+        
+        /* Sliding panel styles */
+        .comparison-viewport {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            height: 700px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: var(--card-border);
+            background-color: white;
+        }
+        
+        .comparison-slider {
+            display: flex;
+            width: 300%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            transform: translateX(-33.33%); /* Start with diff in center */
+        }
+        
+        .panel {
+            width: 33.33%;
+            height: 100%;
+            padding: 30px 80px;
+            background-color: white;
+            overflow-y: auto;
+        }
+        
+        .nav-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.6rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+            transition: var(--transition-standard);
+        }
+        
+        .nav-arrow:hover {
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .nav-arrow:active {
+            transform: translateY(-50%) scale(1);
+        }
+        
+        .nav-arrow.left {
+            left: 25px;
+        }
+        
+        .nav-arrow.right {
+            right: 25px;
+        }
+        
+        .panel-label {
+            display: none; /* Hide the redundant panel labels */
+        }
+        
+        ins {
+            background-color: #e3f8e5;
+            color: #155724;
+            text-decoration: none;
+            padding: 3px 6px;
+            border-radius: 4px;
+            position: relative;
+            box-shadow: 0 0 0 1px rgba(21, 87, 36, 0.1);
+            font-weight: 500;
+        }
+        
+        del {
+            background-color: #fce8ea;
+            color: #721c24;
+            text-decoration: line-through;
+            padding: 3px 6px;
+            border-radius: 4px;
+            position: relative;
+            box-shadow: 0 0 0 1px rgba(114, 28, 36, 0.1);
+            font-weight: 500;
+        }
+        
+        .error {
+            background-color: #fce8ea;
+            color: #721c24;
+            font-weight: 500;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            animation: shake 0.5s ease-in-out;
+            border-left: 5px solid #d9534f;
+        }
+        
+        /* Custom scrollbars */
+        .panel {
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-color) var(--secondary-color);
+        }
+        
+        .panel::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        .panel::-webkit-scrollbar-track {
+            background: var(--secondary-color);
+            border-radius: 10px;
+        }
+        
+        .panel::-webkit-scrollbar-thumb {
+            background: var(--primary-gradient);
+            border-radius: 10px;
+        }
+        
+        .panel::-webkit-scrollbar-thumb:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            h2 {
+                font-size: 1.6rem;
+            }
+            
+            .container {
+                padding: 20px 15px 50px;
+            }
+            
+            .upload-section {
+                padding: 30px 25px;
+            }
+            
+            .comparison-viewport {
+                height: 500px;
+            }
+            
+            .nav-arrow {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+            
+            .panel {
+                padding: 25px 50px;
+            }
+            
+            .panel-label {
+                font-size: 1.1rem;
+                padding: 8px 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .upload-section {
+                padding: 25px 20px;
+            }
+            
+            .panel {
+                padding: 20px 40px;
+            }
+            
+            .nav-arrow {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+            
+            .panel-label {
+                font-size: 1rem;
+                padding: 6px 16px;
+            }
+        }
+        
+        /* Animations */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 7% auto;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+            width: 80%;
+            max-width: 700px;
+            animation: fadeIn 0.4s;
+            position: relative;
+        }
+        
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--primary-gradient);
+            border-top-left-radius: var(--border-radius);
+            border-top-right-radius: var(--border-radius);
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: #777;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition-standard);
+            height: 40px;
+            width: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: #f5f5fa;
+        }
+        
+        .modal-close:hover {
+            color: var(--primary-dark);
+            background-color: var(--accent-lighter);
+            transform: rotate(90deg);
+        }
+        
+        .summary-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+        
+        .summary-table th, .summary-table td {
+            padding: 16px 20px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+        
+        .summary-table th {
+            background: var(--primary-gradient);
+            color: white;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            border: none;
+        }
+        
+        .summary-table th:first-child {
+            border-top-left-radius: var(--border-radius-sm);
+        }
+        
+        .summary-table th:last-child {
+            border-top-right-radius: var(--border-radius-sm);
+        }
+        
+        .summary-table tr:last-child td:first-child {
+            border-bottom-left-radius: var(--border-radius-sm);
+        }
+        
+        .summary-table tr:last-child td:last-child {
+            border-bottom-right-radius: var(--border-radius-sm);
+        }
+        
+        .summary-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .summary-table tr:hover {
+            background-color: rgba(230, 230, 240, 0.4);
+        }
+        
+        .summary-progress {
+            height: 26px;
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 20px;
+            margin-top: 20px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .summary-progress-bar {
+            height: 100%;
+            background: var(--primary-gradient);
+            border-radius: 20px;
+            transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            background-image: linear-gradient(45deg, 
+                rgba(255, 255, 255, 0.15) 25%, 
+                transparent 25%, 
+                transparent 50%, 
+                rgba(255, 255, 255, 0.15) 50%, 
+                rgba(255, 255, 255, 0.15) 75%, 
+                transparent 75%, 
+                transparent);
+            background-size: 30px 30px;
+            animation: progressStripes 2s linear infinite;
+        }
+        
+        @keyframes progressStripes {
+            0% { background-position: 0 0; }
+            100% { background-position: 30px 0; }
+        }
+        
+        .summary-btn {
+            display: inline-block;
+            margin-left: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 18px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition-standard);
+            vertical-align: middle;
+            box-shadow: 0 3px 10px rgba(87, 6, 140, 0.15);
+        }
+        
+        .summary-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(87, 6, 140, 0.2);
+        }
+        
+        .summary-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Updated styles for relocations */
+        ins.relocated {
+            background-color: #e8e3f2;
+            color: var(--primary-dark);
+            text-decoration: none;
+            border-left: 3px solid var(--accent-light);
+            box-shadow: 0 0 0 1px rgba(156, 111, 182, 0.1);
+            margin: 0 2px;
+            font-weight: 500;
+        }
+        
+        del.relocated {
+            background-color: #e8e3f2;
+            color: var(--primary-dark);
+            text-decoration: line-through;
+            border-left: 3px solid var(--accent-light);
+            box-shadow: 0 0 0 1px rgba(156, 111, 182, 0.1);
+            margin: 0 2px;
+            font-weight: 500;
+        }
+        
+        .diff-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .secondary-button {
+            background-color: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: var(--transition-standard);
+            font-weight: 600;
+        }
+        
+        .secondary-button:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(87, 6, 140, 0.15);
+        }
+        
+        /* About modal */
+        #aboutModal {
+            display: none;
+        }
+        
+        /* Enhanced content areas */
+        #originalContent, #modifiedContent, #diffOutput {
+            line-height: 1.7;
+            font-size: 1.1rem;
+            padding: 10px;
+            border-radius: var(--border-radius-sm);
+            background-color: #fcfcff;
+        }
+        
+        #similarityPercent {
+            font-size: 2rem !important; 
+            font-weight: bold; 
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+            text-align: center;
+            margin: 15px 0;
+        }
+    </style>
+    <!-- Include diff-match-patch library -->
+    <script src="https://cdn.jsdelivr.net/npm/diff-match-patch@1.0.5/index.min.js"></script>
+    <!-- Include mammoth.js for DOCX processing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+</head>
+<body>
+
+     <!-- New header section -->
+     <header class="header">
+        <div class="logo-container">
+            <!-- Placeholder for NYU logo -->
+            <img src="https://i.imgur.com/iIODsNl.png" alt="NYU Logo" class="nyu-logo">
+        </div>
+        <button class="about-btn" id="aboutButton">About</button>
+    </header>
+
+    <div class="container">
+        <h1>u even revise, bro?</h1>
+        
+        <div class="upload-section">
+            <h2>Upload Documents</h2>
+            <div class="file-input-container">
+                <label for="file1">Original Document (.docx):</label>
+                <input type="file" id="file1" accept=".docx">
+            </div>
+            <div class="file-input-container">
+                <label for="file2">Modified Document (.docx):</label>
+                <input type="file" id="file2" accept=".docx">
+            </div>
+            <button id="compareBtn">Compare Documents</button>
+        </div>
+        
+        <div id="errorMessage" class="error" style="display: none;"></div>
+        
+        <div id="comparisonResults" style="display: none;">
+            <div class="comparison-viewport">
+                <div class="nav-arrow left" id="leftArrow">←</div>
+                <div class="nav-arrow right" id="rightArrow">→</div>
+                <div class="comparison-slider" id="comparisonSlider">
+                    <div class="panel" id="originalPanel">
+                        <h3>Original Document</h3>
+                        <div id="originalContent"></div>
+                    </div>
+                    <div class="panel" id="diffPanel">
+                        <h3>Differences <button id="summaryBtn" class="summary-btn">Summary Report</button></h3>
+                        <div id="diffOutput"></div>
+                    </div>
+                    <div class="panel" id="modifiedPanel">
+                        <h3>Modified Document</h3>
+                        <div id="modifiedContent"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- About Modal -->
+     <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="aboutModalClose">&times;</span>
+            <h2>About Document Comparison Tool</h2>
+            <div>
+                <p>This tool allows you to compare two DOCX documents and visualize the differences between them.</p>
+                <p>Developed for NYU to help identify changes, additions, deletions, and relocations of content.</p>
+                <p>Upload two documents and see a detailed comparison with a summary report of all changes.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Report Modal -->
+    <div id="summaryModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2>Document Comparison Summary</h2>
+            <div id="summaryContent">
+                <table class="summary-table">
+                    <tr>
+                        <th>Change Type</th>
+                        <th>Word Level</th>
+                        <th>Sentence Level</th>
+                        <th>Paragraph Level</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Deletions</strong> (removed from original)</td>
+                        <td id="wordDeletions">0</td>
+                        <td id="sentenceDeletions">0</td>
+                        <td id="paragraphDeletions">0</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Additions</strong> (added to modified)</td>
+                        <td id="wordAdditions">0</td>
+                        <td id="sentenceAdditions">0</td>
+                        <td id="paragraphAdditions">0</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Alterations</strong> (modified content)</td>
+                        <td id="wordAlterations">0</td>
+                        <td id="sentenceAlterations">0</td>
+                        <td id="paragraphAlterations">0</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Relocations</strong> (moved content)</td>
+                        <td id="wordRelocations">0</td>
+                        <td id="sentenceRelocations">0</td>
+                        <td id="paragraphRelocations">0</td>
+                    </tr>
+                </table>
+                
+                <h3>Overall Similarity</h3>
+                <div id="similarityPercent" style="font-size: 1.5rem; font-weight: bold; color: var(--primary-dark);"></div>
+                <div class="summary-progress">
+                    <div id="similarityBar" class="summary-progress-bar" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables to store document contents and analysis results
+        let originalText = '';
+        let modifiedText = '';
+        let lastDiffResults = [];
+        let lastRelocations = { additions: [], deletions: [] };
+        
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get references to DOM elements
+            const file1Input = document.getElementById('file1');
+            const file2Input = document.getElementById('file2');
+            const compareBtn = document.getElementById('compareBtn');
+            const errorMessage = document.getElementById('errorMessage');
+            const comparisonResults = document.getElementById('comparisonResults');
+            const originalContent = document.getElementById('originalContent');
+            const modifiedContent = document.getElementById('modifiedContent');
+            const diffOutput = document.getElementById('diffOutput');
+            const comparisonSlider = document.getElementById('comparisonSlider');
+            const leftArrow = document.getElementById('leftArrow');
+            const rightArrow = document.getElementById('rightArrow');
+            const summaryBtn = document.getElementById('summaryBtn');
+            const summaryModal = document.getElementById('summaryModal');
+            const modalClose = document.querySelector('.modal-close');
+            
+            // Add event listener to compare button
+            compareBtn.addEventListener('click', function() {
+                // Reset error message and hide results
+                errorMessage.style.display = 'none';
+                comparisonResults.style.display = 'none';
+                
+                // Check if files are selected
+                if (!file1Input.files.length || !file2Input.files.length) {
+                    showError('Please select both files to compare.');
+                    return;
+                }
+                
+                // Get selected files
+                const file1 = file1Input.files[0];
+                const file2 = file2Input.files[0];
+                
+                // Check file types
+                if (!file1.name.endsWith('.docx') || !file2.name.endsWith('.docx')) {
+                    showError('Please select .docx files only.');
+                    return;
+                }
+                
+                // Process files
+                Promise.all([
+                    extractTextFromDocx(file1),
+                    extractTextFromDocx(file2)
+                ])
+                .then(([text1, text2]) => {
+                    originalText = text1;
+                    modifiedText = text2;
+                    
+                    // Display original content - directly set innerHTML
+                    originalContent.innerHTML = originalText;
+                    
+                    // Display modified content - directly set innerHTML
+                    modifiedContent.innerHTML = modifiedText;
+                    
+                    // Compare documents
+                    compareDocuments(originalText, modifiedText);
+                    
+                    // Reset to center position
+                    currentPosition = 1;
+                    updateSliderPosition();
+                    
+                    // Show results
+                    comparisonResults.style.display = 'block';
+                })
+                .catch(error => {
+                    showError('Error processing DOCX files: ' + error.message);
+                    console.error(error);
+                });
+            });
+            
+            // Add event listeners for navigation arrows
+            leftArrow.addEventListener('click', function() {
+                if (currentPosition === 1) { // Currently on diff, move to original
+                    currentPosition = 0;
+                } else if (currentPosition === 2) { // Currently on modified, move to diff
+                    currentPosition = 1;
+                } else { // Already at original, do nothing
+                    return;
+                }
+                updateSliderPosition();
+            });
+            
+            rightArrow.addEventListener('click', function() {
+                if (currentPosition === 1) { // Currently on diff, move to modified
+                    currentPosition = 2;
+                } else if (currentPosition === 0) { // Currently on original, move to diff
+                    currentPosition = 1;
+                } else { // Already at modified, do nothing
+                    return;
+                }
+                updateSliderPosition();
+            });
+            
+            // Function to update slider position and panel label
+            function updateSliderPosition() {
+                // Calculate translation percentage based on current position
+                const translateX = -33.33 * currentPosition;
+                comparisonSlider.style.transform = `translateX(${translateX}%)`;
+            }
+            
+            // Function to extract text from DOCX files
+            function extractTextFromDocx(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        const arrayBuffer = e.target.result;
+                        
+                        mammoth.convertToHtml({ arrayBuffer: arrayBuffer }, {
+                            includeDefaultStyleMap: true,
+                            preserveNumbering: true
+                        })
+                            .then(result => {
+                                resolve(result.value);
+                            })
+                            .catch(error => {
+                                reject(error);
+                            });
+                    };
+                    
+                    reader.onerror = function(error) {
+                        reject(error);
+                    };
+                    
+                    reader.readAsArrayBuffer(file);
+                });
+            }
+            
+            // Function to compare documents
+            function compareDocuments(text1, text2) {
+                try {
+                    // Create diff-match-patch instance
+                    const dmp = new diff_match_patch();
+                    
+                    // Process HTML to normalize and preserve structure before comparing
+                    const processedText1 = normalizeTextForComparison(text1);
+                    const processedText2 = normalizeTextForComparison(text2);
+                    
+                    // Compute the diff
+                    const diffs = dmp.diff_main(processedText1, processedText2);
+                    
+                    // Make the diff more human-readable
+                    dmp.diff_cleanupSemantic(diffs);
+                    
+                    // Store the diff for summary analysis
+                    lastDiffResults = [...diffs];
+                    
+                    // Find potential relocations
+                    const relocations = findRelocations(processedText1, processedText2, diffs);
+                    
+                    // Store relocations globally for the summary report
+                    lastRelocations = relocations;
+                    
+                    // Convert diff to HTML with relocations highlighted
+                    let html = '';
+                    let pos1 = 0; // Position in text1
+                    let pos2 = 0; // Position in text2
+                    
+                    for (let i = 0; i < diffs.length; i++) {
+                        const [operation, text] = diffs[i];
+                        
+                        // Convert the processed text back to display HTML
+                        let displayText = postprocessDiffText(text);
+                        
+                        // Track positions
+                        let currentPos1 = pos1;
+                        let currentPos2 = pos2;
+                        
+                        if (operation === 0) {
+                            html += displayText;
+                            pos1 += text.length;
+                            pos2 += text.length;
+                        } else if (operation === -1) { // Deletion
+                            // Check if this deletion is part of a relocation
+                            const isRelocated = isPartOfRelocation(currentPos1, text.length, relocations.deletions);
+                            
+                            if (isRelocated) {
+                                html += '<del class="relocated">' + displayText + '</del>';
+                            } else {
+                                html += '<del>' + displayText + '</del>';
+                            }
+                            pos1 += text.length;
+                        } else if (operation === 1) { // Addition
+                            // Check if this addition is part of a relocation
+                            const isRelocated = isPartOfRelocation(currentPos2, text.length, relocations.additions);
+                            
+                            if (isRelocated) {
+                                html += '<ins class="relocated">' + displayText + '</ins>';
+                            } else {
+                                html += '<ins>' + displayText + '</ins>';
+                            }
+                            pos2 += text.length;
+                        }
+                    }
+                    
+                    // Display diff
+                    diffOutput.innerHTML = html;
+                    
+                    // Display original and modified content with formatting
+                    originalContent.innerHTML = postprocessDiffText(processedText1);
+                    modifiedContent.innerHTML = postprocessDiffText(processedText2);
+                } catch (error) {
+                    showError('Error comparing documents: ' + error.message);
+                    console.error(error);
+                }
+            }
+            
+            // Function to normalize text for comparison (replacement for preprocessHtmlForDiff)
+            function normalizeTextForComparison(text) {
+                if (!text) return '';
+                
+                // Convert line breaks to a standard format
+                let processedText = text.replace(/\r\n|\r/g, '\n');
+                
+                // Mark list items for preservation
+                processedText = processedText.replace(/^(\d+\.\s+)(.+)$/gm, '[LIST_ITEM_$1]$2');
+                processedText = processedText.replace(/^[•\*\-]\s+(.+)$/gm, '[BULLET] $1');
+                
+                // Normalize whitespace
+                processedText = processedText.replace(/[ \t]+/g, ' ');
+                processedText = processedText.replace(/[ ]*\n[ ]*/g, '\n');
+                processedText = processedText.replace(/\n{3,}/g, '\n\n');
+                
+                return processedText;
+            }
+            
+            // Function to post-process diff text for display
+            function postprocessDiffText(text) {
+                if (!text) return '';
+                
+                // Restore list item markers
+                let processedText = text.replace(/\[LIST_ITEM_(\d+\.\s+)\]/g, '<strong>$1</strong>');
+                processedText = processedText.replace(/\[BULLET\]/g, '• ');
+                
+                // Convert newlines to <br> tags for HTML display
+                processedText = processedText.replace(/\n/g, '<br>');
+                
+                return processedText;
+            }
+            
+            // Check if a position is part of a relocation
+            function isPartOfRelocation(position, length, relocations) {
+                const end = position + length;
+                for (const reloc of relocations) {
+                    const relocEnd = reloc.position + reloc.length;
+                    // Check for overlap
+                    if (!(position >= relocEnd || end <= reloc.position)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            
+            // Function to detect potential relocations
+            function findRelocations(text1, text2, diffs) {
+                // Build text fingerprints for chunks in both documents
+                const chunks1 = buildChunks(text1, 20); // 20 characters minimum chunk size
+                const chunks2 = buildChunks(text2, 20);
+                
+                // Track positions in original texts
+                let pos1 = 0;
+                let pos2 = 0;
+                
+                // Track deletion and addition spans that might be relocations
+                const deletions = [];
+                const additions = [];
+                
+                // Process the diff to find deletion and addition spans
+                for (const [operation, text] of diffs) {
+                    if (operation === -1) { // Deletion
+                        deletions.push({
+                            text: text,
+                            position: pos1,
+                            length: text.length
+                        });
+                        pos1 += text.length;
+                    } else if (operation === 1) { // Addition
+                        additions.push({
+                            text: text,
+                            position: pos2,
+                            length: text.length
+                        });
+                        pos2 += text.length;
+                    } else { // Unchanged
+                        pos1 += text.length;
+                        pos2 += text.length;
+                    }
+                }
+                
+                // Find matching chunks that appear in different locations
+                const relocationMap = new Map();
+                
+                // For each significant chunk in document 1
+                for (const chunk1 of chunks1) {
+                    // Find matching chunks in document 2
+                    for (const chunk2 of chunks2) {
+                        // If chunks are identical or very similar
+                        if (chunk1.text === chunk2.text || 
+                            (chunk1.text.length > 30 && calculateStringSimilarity(chunk1.text, chunk2.text) > 0.9)) {
+                            
+                            // Calculate relative positions
+                            const relPos1 = chunk1.position / text1.length;
+                            const relPos2 = chunk2.position / text2.length;
+                            
+                            // If position has changed significantly, it's a candidate relocation
+                            if (Math.abs(relPos1 - relPos2) > 0.03) {
+                                const key = chunk1.text;
+                                relocationMap.set(key, {
+                                    text: chunk1.text,
+                                    origPos: chunk1.position,
+                                    modPos: chunk2.position,
+                                    length: chunk1.text.length
+                                });
+                            }
+                        }
+                    }
+                }
+                
+                // Mark deletion and addition spans that match relocations
+                const markedDeletions = [];
+                const markedAdditions = [];
+                
+                // For each relocation candidate
+                for (const relocation of relocationMap.values()) {
+                    // Find matching deletion spans
+                    for (const deletion of deletions) {
+                        // Check if this deletion contains the relocated text
+                        if (deletion.text.includes(relocation.text)) {
+                            // Calculate the position within the deletion
+                            const offset = deletion.text.indexOf(relocation.text);
+                            markedDeletions.push({
+                                position: deletion.position + offset,
+                                length: relocation.length
+                            });
+                        }
+                    }
+                    
+                    // Find matching addition spans
+                    for (const addition of additions) {
+                        // Check if this addition contains the relocated text
+                        if (addition.text.includes(relocation.text)) {
+                            // Calculate the position within the addition
+                            const offset = addition.text.indexOf(relocation.text);
+                            markedAdditions.push({
+                                position: addition.position + offset,
+                                length: relocation.length
+                            });
+                        }
+                    }
+                }
+                
+                return {
+                    deletions: markedDeletions,
+                    additions: markedAdditions
+                };
+            }
+            
+            // Build chunks of text for relocation analysis
+            function buildChunks(text, minSize) {
+                const chunks = [];
+                
+                // First try sentence-based chunks
+                const sentences = text.split(/([.!?](?:\s|$))/);
+                let currentChunk = '';
+                let startPos = 0;
+                
+                for (let i = 0; i < sentences.length; i += 2) {
+                    const sentence = sentences[i] + (sentences[i+1] || '');
+                    
+                    // Skip very short segments
+                    if (sentence.trim().length < minSize) {
+                        startPos += sentence.length;
+                        continue;
+                    }
+                    
+                    // Add meaningful chunks to our collection
+                    chunks.push({
+                        text: sentence,
+                        position: startPos,
+                        length: sentence.length
+                    });
+                    
+                    startPos += sentence.length;
+                }
+                
+                // If we didn't find many sentence-based chunks, try sliding window approach
+                if (chunks.length < 5) {
+                    // Use sliding window for chunks
+                    const window = 50; // 50 character window
+                    const step = 25;   // 25 character step
+                    
+                    for (let i = 0; i < text.length - window; i += step) {
+                        const chunk = text.substring(i, i + window);
+                        chunks.push({
+                            text: chunk,
+                            position: i,
+                            length: chunk.length
+                        });
+                    }
+                }
+                
+                return chunks;
+            }
+            
+            // Function to show error message
+            function showError(message) {
+                errorMessage.textContent = message;
+                errorMessage.style.display = 'block';
+            }
+            
+            // Add event listener to summary button
+            summaryBtn.addEventListener('click', function() {
+                try {
+                    // Generate and display the summary report
+                    generateSummaryReport();
+                    
+                    // Show the modal
+                    summaryModal.style.display = 'block';
+                } catch (error) {
+                    showError('Error generating summary: ' + error.message);
+                    console.error(error);
+                }
+            });
+            
+            // Close modal when clicking the X
+            modalClose.addEventListener('click', function() {
+                summaryModal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside the content
+            window.addEventListener('click', function(event) {
+                if (event.target === summaryModal) {
+                    summaryModal.style.display = 'none';
+                }
+            });
+            
+            // Function to generate summary report
+            function generateSummaryReport() {
+                // Extract the text for analysis
+                const processedText1 = normalizeTextForComparison(originalText);
+                const processedText2 = normalizeTextForComparison(modifiedText);
+                
+                // Parse the texts into structural elements
+                const original = parseTextStructure(processedText1);
+                const modified = parseTextStructure(processedText2);
+                
+                // Initialize counters for each type of change and level
+                const counts = {
+                    deletions: { word: 0, sentence: 0, paragraph: 0 },
+                    additions: { word: 0, sentence: 0, paragraph: 0 },
+                    alterations: { word: 0, sentence: 0, paragraph: 0 },
+                    relocations: { word: 0, sentence: 0, paragraph: 0 }
+                };
+                
+                // Calculate similarity percentage using the diff results
+                let totalLength = processedText1.length + processedText2.length;
+                let unchangedLength = 0;
+                
+                lastDiffResults.forEach(([operation, text]) => {
+                    if (operation === 0) {
+                        unchangedLength += text.length * 2; // Count unchanged text twice (once in each document)
+                    }
+                });
+                
+                const similarity = totalLength > 0 ? Math.round((unchangedLength / totalLength) * 100) : 100;
+                
+                // Get the relocated content as it appears in the diff display
+                const relocatedContent = {
+                    // Get text from deletions (original document)
+                    deletions: lastRelocations.deletions.map(r => processedText1.substring(r.position, r.position + r.length)),
+                    // Get text from additions (modified document)
+                    additions: lastRelocations.additions.map(r => processedText2.substring(r.position, r.position + r.length))
+                };
+                
+                // Count actual relocated sentences by examining the relocated content
+                // Use the "deletions" (original position) to count, as these represent the original sentences
+                const relocatedSentences = new Set();
+                
+                // Find whole sentences in the relocated content
+                for (const content of relocatedContent.deletions) {
+                    // Find which sentences this relocated content contains
+                    const sentenceMatches = findWholeMatchingSentences(content, original.sentences);
+                    sentenceMatches.forEach(sentence => relocatedSentences.add(sentence));
+                }
+                
+                // Set the sentence relocation count to the number of UNIQUE sentences
+                counts.relocations.sentence = relocatedSentences.size;
+                
+                // Similarly for paragraphs
+                const relocatedParagraphs = new Set();
+                
+                for (const content of relocatedContent.deletions) {
+                    const paragraphMatches = findWholeMatchingSentences(content, original.paragraphs);
+                    paragraphMatches.forEach(paragraph => relocatedParagraphs.add(paragraph));
+                }
+                
+                counts.relocations.paragraph = relocatedParagraphs.size;
+                
+                // Analyze word-level changes (no word relocations as requested)
+                analyzeWordChanges(original.words, modified.words, counts);
+                
+                // Analyze sentence and paragraph changes (excluding relocations)
+                analyzeSentenceChanges(original.sentences, modified.sentences, counts);
+                analyzeParagraphChanges(original.paragraphs, modified.paragraphs, counts);
+                
+                // Adjust counts to avoid double-counting
+                // Subtract relocation counts from additions and deletions
+                counts.deletions.sentence = Math.max(0, counts.deletions.sentence - counts.relocations.sentence);
+                counts.additions.sentence = Math.max(0, counts.additions.sentence - counts.relocations.sentence);
+                counts.deletions.paragraph = Math.max(0, counts.deletions.paragraph - counts.relocations.paragraph);
+                counts.additions.paragraph = Math.max(0, counts.additions.paragraph - counts.relocations.paragraph);
+                
+                // Update the summary display
+                document.getElementById('wordDeletions').textContent = counts.deletions.word;
+                document.getElementById('sentenceDeletions').textContent = counts.deletions.sentence;
+                document.getElementById('paragraphDeletions').textContent = counts.deletions.paragraph;
+                
+                document.getElementById('wordAdditions').textContent = counts.additions.word;
+                document.getElementById('sentenceAdditions').textContent = counts.additions.sentence;
+                document.getElementById('paragraphAdditions').textContent = counts.additions.paragraph;
+                
+                document.getElementById('wordAlterations').textContent = counts.alterations.word;
+                document.getElementById('sentenceAlterations').textContent = counts.alterations.sentence;
+                document.getElementById('paragraphAlterations').textContent = counts.alterations.paragraph;
+                
+                document.getElementById('wordRelocations').textContent = counts.relocations.word;
+                document.getElementById('sentenceRelocations').textContent = counts.relocations.sentence;
+                document.getElementById('paragraphRelocations').textContent = counts.relocations.paragraph;
+                
+                document.getElementById('similarityPercent').textContent = `${similarity}% similar`;
+                document.getElementById('similarityBar').style.width = `${similarity}%`;
+                
+                // Adjust color based on similarity
+                const similarityBar = document.getElementById('similarityBar');
+                if (similarity > 75) {
+                    similarityBar.style.backgroundColor = '#4CAF50'; // Green
+                } else if (similarity > 50) {
+                    similarityBar.style.backgroundColor = '#FFC107'; // Amber
+                } else {
+                    similarityBar.style.backgroundColor = '#F44336'; // Red
+                }
+            }
+            
+            // Helper function to find whole matching sentences
+            function findWholeMatchingSentences(text, sentences) {
+                const matchingSentences = [];
+                const normalizedText = text.toLowerCase().trim();
+                
+                for (const sentence of sentences) {
+                    const normalizedSentence = sentence.toLowerCase().trim();
+                    
+                    // Consider a sentence part of the relocated content if:
+                    // 1. The exact sentence appears in the relocated content, or
+                    // 2. At least 90% of the sentence appears in the relocated content
+                    if (normalizedText.includes(normalizedSentence) || 
+                        (normalizedSentence.length > 20 && containsSignificantPortion(normalizedText, normalizedSentence, 0.9))) {
+                        matchingSentences.push(sentence);
+                    }
+                }
+                
+                return matchingSentences;
+            }
+            
+            // Helper function to check if a large portion of text is contained
+            function containsSignificantPortion(container, text, threshold) {
+                if (text.length < 10) return false; // Too short to be meaningful
+                
+                // Break the sentence into chunks and see if most chunks appear in the container
+                const words = text.split(/\s+/);
+                let matchedWords = 0;
+                
+                for (const word of words) {
+                    if (container.includes(word)) {
+                        matchedWords++;
+                    }
+                }
+                
+                return matchedWords / words.length >= threshold;
+            }
+            
+            // Function to analyze word-level changes
+            function analyzeWordChanges(originalWords, modifiedWords, counts) {
+                // Create maps of words with their counts for each document
+                const originalWordMap = createWordFrequencyMap(originalWords);
+                const modifiedWordMap = createWordFrequencyMap(modifiedWords);
+                
+                // Find deletions (words in original but not in modified or with fewer occurrences)
+                for (const [word, count] of originalWordMap.entries()) {
+                    const modifiedCount = modifiedWordMap.get(word) || 0;
+                    if (modifiedCount < count) {
+                        counts.deletions.word += (count - modifiedCount);
+                    }
+                }
+                
+                // Find additions (words in modified but not in original or with more occurrences)
+                for (const [word, count] of modifiedWordMap.entries()) {
+                    const originalCount = originalWordMap.get(word) || 0;
+                    if (originalCount < count) {
+                        counts.additions.word += (count - originalCount);
+                    }
+                }
+                
+                // Find alterations by looking at diff operations
+                let inAlteration = false;
+                let alterationWordCount = 0;
+                
+                lastDiffResults.forEach(([operation, text]) => {
+                    // Words in this diff segment
+                    const words = text.match(/\b[\w']+\b/g) || [];
+                    
+                    if (operation !== 0) { // Change operation (addition or deletion)
+                        if (!inAlteration) {
+                            inAlteration = true;
+                            alterationWordCount = 0;
+                        }
+                        alterationWordCount += words.length;
+                    } else { // No change
+                        if (inAlteration && alterationWordCount > 0) {
+                            // Estimate alterations as half of deletions + additions
+                            // (since each alteration typically involves both)
+                            counts.alterations.word += Math.ceil(alterationWordCount / 2);
+                            inAlteration = false;
+                        }
+                    }
+                });
+                
+                // We don't track word-level relocations as per request
+                counts.relocations.word = 0;
+            }
+            
+            // Function to create a map of word frequencies
+            function createWordFrequencyMap(words) {
+                const map = new Map();
+                for (const word of words) {
+                    const normalized = word.toLowerCase();
+                    map.set(normalized, (map.get(normalized) || 0) + 1);
+                }
+                return map;
+            }
+            
+            // Function to analyze sentence-level changes
+            function analyzeSentenceChanges(originalSentences, modifiedSentences, counts) {
+                // Track which sentences have been accounted for
+                const matchedOrigIndexes = new Set();
+                const matchedModIndexes = new Set();
+                
+                // First pass: find exact matches and track their context
+                const exactMatches = [];
+                
+                for (let i = 0; i < originalSentences.length; i++) {
+                    const origSentence = originalSentences[i].trim();
+                    const origSentenceLower = origSentence.toLowerCase();
+                    
+                    for (let j = 0; j < modifiedSentences.length; j++) {
+                        const modSentence = modifiedSentences[j].trim();
+                        const modSentenceLower = modSentence.toLowerCase();
+                        
+                        // Check for exact or very close match
+                        if (origSentenceLower === modSentenceLower || 
+                            calculateStringSimilarity(origSentenceLower, modSentenceLower) > 0.9) {
+                            exactMatches.push({
+                                origIndex: i,
+                                modIndex: j,
+                                origRelativePos: i / originalSentences.length,
+                                modRelativePos: j / modifiedSentences.length,
+                                text: origSentence
+                            });
+                            break;
+                        }
+                    }
+                }
+                
+                // Second pass: identify relocations vs. unchanged content
+                exactMatches.forEach(match => {
+                    const { origIndex, modIndex, origRelativePos, modRelativePos } = match;
+                    
+                    // Mark these sentences as matched
+                    matchedOrigIndexes.add(origIndex);
+                    matchedModIndexes.add(modIndex);
+                    
+                    // Check if this is a relocated sentence
+                    // A significant position change (> 15%) AND context change indicates relocation
+                    const positionDifference = Math.abs(origRelativePos - modRelativePos);
+                    let isRelocated = false;
+                    
+                    if (positionDifference > 0.15) { // Position changed significantly
+                        // Check context change by looking at surrounding sentences
+                        const origPrevSentence = originalSentences[origIndex - 1]?.trim().toLowerCase() || '';
+                        const origNextSentence = originalSentences[origIndex + 1]?.trim().toLowerCase() || '';
+                        const modPrevSentence = modifiedSentences[modIndex - 1]?.trim().toLowerCase() || '';
+                        const modNextSentence = modifiedSentences[modIndex + 1]?.trim().toLowerCase() || '';
+                        
+                        const prevContextChanged = origPrevSentence !== modPrevSentence;
+                        const nextContextChanged = origNextSentence !== modNextSentence;
+                        
+                        // If both surrounding context changed, it's likely a relocation
+                        if (prevContextChanged && nextContextChanged) {
+                            isRelocated = true;
+                            counts.relocations.sentence++;
+                        }
+                    }
+                    
+                    // If we found a relocated sentence, ensure it's not double-counted
+                    if (isRelocated) {
+                        return;
+                    }
+                });
+                
+                // Find similar but not identical sentences (alterations)
+                const similarPairs = [];
+                
+                for (let i = 0; i < originalSentences.length; i++) {
+                    if (matchedModIndexes.has(i)) continue;
+                    
+                    const origSentence = originalSentences[i].trim().toLowerCase();
+                    
+                    for (let j = 0; j < modifiedSentences.length; j++) {
+                        if (matchedOrigIndexes.has(j)) continue;
+                        
+                        const modSentence = modifiedSentences[j].trim().toLowerCase();
+                        
+                        // Check for similarity (potential alteration)
+                        const similarity = calculateStringSimilarity(origSentence, modSentence);
+                        if (similarity > 0.6) { // 60% similar
+                            similarPairs.push([i, j, similarity]);
+                        }
+                    }
+                }
+                
+                // Process similar pairs to find alterations (greedy matching)
+                similarPairs.sort((a, b) => b[2] - a[2]); // Sort by similarity (highest first)
+                
+                for (const [origIdx, modIdx, similarity] of similarPairs) {
+                    if (!matchedOrigIndexes.has(origIdx) && !matchedModIndexes.has(modIdx)) {
+                        matchedOrigIndexes.add(origIdx);
+                        matchedModIndexes.add(modIdx);
+                        counts.alterations.sentence++;
+                    }
+                }
+                
+                // Count deletions and additions
+                counts.deletions.sentence = originalSentences.length - matchedOrigIndexes.size;
+                counts.additions.sentence = modifiedSentences.length - matchedModIndexes.size;
+            }
+            
+            // Function to analyze paragraph-level changes
+            function analyzeParagraphChanges(originalParagraphs, modifiedParagraphs, counts) {
+                // Track which paragraphs have been accounted for
+                const matchedOrigIndexes = new Set();
+                const matchedModIndexes = new Set();
+                
+                // First pass: find exact matches and track their context
+                const exactMatches = [];
+                
+                for (let i = 0; i < originalParagraphs.length; i++) {
+                    const origPara = originalParagraphs[i].trim();
+                    const origParaLower = origPara.toLowerCase();
+                    
+                    for (let j = 0; j < modifiedParagraphs.length; j++) {
+                        const modPara = modifiedParagraphs[j].trim();
+                        const modParaLower = modPara.toLowerCase();
+                        
+                        // Check for exact or very close match
+                        if (origParaLower === modParaLower ||
+                            calculateStringSimilarity(origParaLower, modParaLower) > 0.9) {
+                            exactMatches.push({
+                                origIndex: i,
+                                modIndex: j,
+                                origRelativePos: i / originalParagraphs.length,
+                                modRelativePos: j / modifiedParagraphs.length,
+                                text: origPara
+                            });
+                            break;
+                        }
+                    }
+                }
+                
+                // Second pass: identify relocations vs. unchanged content
+                exactMatches.forEach(match => {
+                    const { origIndex, modIndex, origRelativePos, modRelativePos } = match;
+                    
+                    // Mark these paragraphs as matched
+                    matchedOrigIndexes.add(origIndex);
+                    matchedModIndexes.add(modIndex);
+                    
+                    // Check if this is a relocated paragraph
+                    // A significant position change (> 15%) AND context change indicates relocation
+                    const positionDifference = Math.abs(origRelativePos - modRelativePos);
+                    let isRelocated = false;
+                    
+                    if (positionDifference > 0.15) { // Position changed significantly
+                        // Check context change by looking at surrounding paragraphs
+                        const origPrevPara = originalParagraphs[origIndex - 1]?.trim().toLowerCase() || '';
+                        const origNextPara = originalParagraphs[origIndex + 1]?.trim().toLowerCase() || '';
+                        const modPrevPara = modifiedParagraphs[modIndex - 1]?.trim().toLowerCase() || '';
+                        const modNextPara = modifiedParagraphs[modIndex + 1]?.trim().toLowerCase() || '';
+                        
+                        const prevContextChanged = origPrevPara !== modPrevPara;
+                        const nextContextChanged = origNextPara !== modNextPara;
+                        
+                        // If both surrounding context changed, it's likely a relocation
+                        if (prevContextChanged && nextContextChanged) {
+                            isRelocated = true;
+                            counts.relocations.paragraph++;
+                        }
+                    }
+                    
+                    // If we found a relocated paragraph, ensure it's not double-counted
+                    if (isRelocated) {
+                        return;
+                    }
+                });
+                
+                // Remaining paragraphs: find alterations (similar but not identical)
+                const similarPairs = [];
+                
+                for (let i = 0; i < originalParagraphs.length; i++) {
+                    if (matchedModIndexes.has(i)) continue;
+                    
+                    const origPara = originalParagraphs[i].trim().toLowerCase();
+                    
+                    for (let j = 0; j < modifiedParagraphs.length; j++) {
+                        if (matchedOrigIndexes.has(j)) continue;
+                        
+                        const modPara = modifiedParagraphs[j].trim().toLowerCase();
+                        
+                        // Check for similarity (potential alteration)
+                        const similarity = calculateStringSimilarity(origPara, modPara);
+                        if (similarity > 0.6) { // 60% similar
+                            similarPairs.push([i, j, similarity]);
+                        }
+                    }
+                }
+                
+                // Process similar pairs to find alterations (greedy matching)
+                similarPairs.sort((a, b) => b[2] - a[2]); // Sort by similarity (highest first)
+                
+                for (const [origIdx, modIdx, similarity] of similarPairs) {
+                    if (!matchedOrigIndexes.has(origIdx) && !matchedModIndexes.has(modIdx)) {
+                        matchedOrigIndexes.add(origIdx);
+                        matchedModIndexes.add(modIdx);
+                        counts.alterations.paragraph++;
+                    }
+                }
+                
+                // Count deletions and additions
+                counts.deletions.paragraph = originalParagraphs.length - matchedOrigIndexes.size;
+                counts.additions.paragraph = modifiedParagraphs.length - matchedModIndexes.size;
+            }
+            
+            // Function to calculate string similarity using Levenshtein distance
+            function calculateStringSimilarity(str1, str2) {
+                if (str1 === str2) return 1.0;
+                
+                const len1 = str1.length;
+                const len2 = str2.length;
+                
+                // Simple length check first
+                if (len1 === 0 || len2 === 0) {
+                    return 0;
+                }
+                
+                // Use simplified similarity for performance
+                if (len1 > 100 || len2 > 100) {
+                    // Compare just the beginning and end for long strings
+                    const sampleSize = 50;
+                    const str1Start = str1.substring(0, Math.min(sampleSize, len1));
+                    const str2Start = str2.substring(0, Math.min(sampleSize, len2));
+                    const str1End = len1 > sampleSize ? str1.substring(len1 - sampleSize) : '';
+                    const str2End = len2 > sampleSize ? str2.substring(len2 - sampleSize) : '';
+                    
+                    const startSimilarity = calculateJaccardSimilarity(str1Start, str2Start);
+                    const endSimilarity = str1End && str2End ? calculateJaccardSimilarity(str1End, str2End) : 0;
+                    
+                    return (startSimilarity + endSimilarity) / 2;
+                }
+                
+                // For shorter strings, use Jaccard similarity of character bigrams
+                return calculateJaccardSimilarity(str1, str2);
+            }
+            
+            // Function to calculate Jaccard similarity
+            function calculateJaccardSimilarity(str1, str2) {
+                // Create sets of character bigrams
+                const set1 = new Set();
+                const set2 = new Set();
+                
+                for (let i = 0; i < str1.length - 1; i++) {
+                    set1.add(str1.substring(i, i + 2));
+                }
+                
+                for (let i = 0; i < str2.length - 1; i++) {
+                    set2.add(str2.substring(i, i + 2));
+                }
+                
+                // Count intersection and union
+                let intersection = 0;
+                for (const item of set1) {
+                    if (set2.has(item)) {
+                        intersection++;
+                    }
+                }
+                
+                const union = set1.size + set2.size - intersection;
+                
+                return union === 0 ? 0 : intersection / union;
+            }
+            
+            // Function to parse text into structural elements
+            function parseTextStructure(text) {
+                if (!text) return { words: [], sentences: [], paragraphs: [], fullText: '' };
+                
+                // Split into words (excluding punctuation and whitespace)
+                const wordRegex = /\b[\w']+\b/g;
+                const words = text.match(wordRegex) || [];
+                
+                // Split into sentences
+                const sentenceRegex = /[^.!?]+[.!?]+/g;
+                const sentences = text.match(sentenceRegex) || [];
+                
+                // Split into paragraphs (looking for double line breaks)
+                const paragraphs = text.split(/\n\n+/).filter(p => {
+                    // Must have at least 5 words and contain terminal punctuation to be a paragraph
+                    const paraWords = p.match(wordRegex) || [];
+                    const hasEndPunct = /[.!?](\s|$)/.test(p);
+                    const isList = /^\s*(\d+\.|\*|\-|\•)\s/.test(p);
+                    return paraWords.length >= 5 && hasEndPunct && !isList;
+                });
+                
+                return { words, sentences, paragraphs, fullText: text };
+            }
+        });
+    </script>
+</body>
+</html>
