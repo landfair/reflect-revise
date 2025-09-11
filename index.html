@@ -387,6 +387,41 @@
     object-fit: contain;
 }
 
+.loading-spinner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    backdrop-filter: blur(2px);
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid var(--accent-lighter);
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.spinner-text {
+    margin-top: 20px;
+    color: var(--primary-dark);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 
        
         
@@ -723,6 +758,13 @@
 
 
 <body>
+
+    <div id="loadingSpinner" class="loading-spinner">
+        <div>
+            <div class="spinner"></div>
+            <div class="spinner-text">Analyzing drafts...</div>
+        </div>
+    </div>
 
     <header class="header">
         <div class="logo-container">
@@ -1161,8 +1203,10 @@ function handleFileUpload(files) {
     
     if (uploadedFiles.length > 0) {
         fileList.style.display = 'block';
-        if (uploadedFiles.length >= 2) {
-            compareBtn.style.display = 'block';
+        if (uploadedFiles.length < 2) {
+            document.getElementById('loadingSpinner').style.display = 'none';
+            showError('Please upload at least 2 files to compare.');
+            return;
         }
     }
 }
@@ -1202,7 +1246,11 @@ function refreshFileList() {
 }
 
 async function compareUploadedFiles() {
+    // Show spinner
+    document.getElementById('loadingSpinner').style.display = 'flex';
+    
     if (uploadedFiles.length < 2) {
+        document.getElementById('loadingSpinner').style.display = 'none';
         showError('Please upload at least 2 files to compare.');
         return;
     }
@@ -1230,7 +1278,6 @@ async function compareUploadedFiles() {
         totalPanels = panelInfo.length;
         currentPosition = 0;
         
-        // ADD THESE LINES HERE:
         // Hide upload section
         const uploadSection = document.querySelector('.upload-section');
         if (uploadSection) uploadSection.classList.add('hidden');
@@ -1240,11 +1287,13 @@ async function compareUploadedFiles() {
         updateSliderPosition();
         updateNavigationInfo(panelInfo);
         
-        // ADD THIS LINE HERE:
-        // Add event listener for new comparison button
         setupNewComparisonButton();
         
+        // Hide spinner - moved to end
+        document.getElementById('loadingSpinner').style.display = 'none';
+        
     } catch (error) {
+        document.getElementById('loadingSpinner').style.display = 'none';
         showError('Error reading files: ' + error.message);
     }
 }
@@ -1464,11 +1513,15 @@ For technology designers, these questions carry greater weight. Designers must r
         }
         
         function loadExampleEssay(essayId) {
-            const essay = exampleEssays[essayId];
-            if (!essay || !essay.drafts) {
-                showError('Example essay not found.');
-                return;
-            }
+    // Show spinner
+    document.getElementById('loadingSpinner').style.display = 'flex';
+    
+    const essay = exampleEssays[essayId];
+    if (!essay || !essay.drafts) {
+        document.getElementById('loadingSpinner').style.display = 'none';
+        showError('Example essay not found.');
+        return;
+    }
             
             currentEssay = essay;
             
@@ -1495,6 +1548,9 @@ For technology designers, these questions carry greater weight. Designers must r
             
             // Add event listener for new comparison button
             setupNewComparisonButton();
+
+            // Hide spinner
+            document.getElementById('loadingSpinner').style.display = 'none';
         }
         
         function updateNavigationInfo(panelInfo) {
