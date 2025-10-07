@@ -972,6 +972,542 @@
     box-shadow: 0 5px 15px rgba(87, 6, 140, 0.3);
 }
 
+/* Annotation Styles */
+.annotatable {
+    cursor: pointer;
+    position: relative;
+}
+
+.annotatable:hover {
+    background-color: rgba(87, 6, 140, 0.1) !important;
+    box-shadow: 0 0 0 2px rgba(87, 6, 140, 0.3);
+}
+
+/* Find and REPLACE the .has-annotation styles */
+.has-annotation {
+    border-bottom: 3px solid var(--primary-color);
+    background-color: rgba(87, 6, 140, 0.08);
+    padding: 2px 4px;
+    border-radius: 3px;
+    box-shadow: 0 0 0 2px rgba(87, 6, 140, 0.15);
+}
+
+.has-annotation::after {
+    content: '📝';
+    font-size: 1em;
+    margin-left: 6px;
+    opacity: 0.9;
+    vertical-align: middle;
+}
+
+/* Add this new CSS rule for animation */
+@keyframes annotationPulse {
+    0%, 100% {
+        box-shadow: 0 0 0 2px rgba(87, 6, 140, 0.15);
+    }
+    50% {
+        box-shadow: 0 0 0 4px rgba(87, 6, 140, 0.25);
+    }
+}
+
+.has-annotation {
+    border-bottom: 3px solid var(--primary-color);
+    background-color: rgba(87, 6, 140, 0.08);
+    padding: 2px 4px;
+    border-radius: 3px;
+    box-shadow: 0 0 0 2px rgba(87, 6, 140, 0.15);
+    animation: annotationPulse 2s ease-in-out infinite;
+}
+
+.has-annotation::after {
+    content: '📝';
+    font-size: 1em;
+    margin-left: 6px;
+    opacity: 0.9;
+    vertical-align: middle;
+}
+
+.annotation-popup {
+    position: fixed;
+    background: white;
+    border: 2px solid var(--primary-color);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    z-index: 2000;
+    max-width: 400px;
+    min-width: 300px;
+}
+
+.annotation-popup h4 {
+    margin: 0 0 15px 0;
+    color: var(--primary-dark);
+    font-size: 1.1rem;
+}
+
+.annotation-popup textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    font-family: var(--font-primary);
+    font-size: 0.95rem;
+    resize: vertical;
+}
+
+.annotation-popup-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.annotation-save-btn, .annotation-cancel-btn, .annotation-delete-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition-standard);
+}
+
+.annotation-save-btn {
+    background: var(--primary-gradient);
+    color: white;
+    flex: 1;
+}
+
+.annotation-save-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(87, 6, 140, 0.3);
+}
+
+.annotation-cancel-btn {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.annotation-delete-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.annotation-display {
+    margin-top: 5px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-left: 3px solid var(--primary-color);
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-style: italic;
+    color: #555;
+}
+
+.annotations-panel {
+    background: white;
+    padding: 25px;
+    margin: 20px 0;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    border: var(--card-border);
+}
+
+.annotations-panel h3 {
+    color: var(--primary-dark);
+    margin-bottom: 20px;
+}
+
+.annotation-item {
+    padding: 15px;
+    margin-bottom: 15px;
+    background: #f8f9fa;
+    border-radius: var(--border-radius-sm);
+    border-left: 4px solid var(--primary-color);
+}
+
+.annotation-item-header {
+    font-weight: 600;
+    color: var(--primary-dark);
+    margin-bottom: 8px;
+}
+
+.annotation-item-text {
+    color: #555;
+    margin-bottom: 8px;
+}
+
+.annotation-item-note {
+    background: white;
+    padding: 10px;
+    border-radius: 4px;
+    font-style: italic;
+    color: #333;
+}
+
+.view-annotations-btn {
+    background: white;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-standard);
+    margin: 15px;
+    box-shadow: 0 3px 10px rgba(87, 6, 140, 0.2);
+}
+
+.view-annotations-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Data Management Styles */
+.data-manager {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.data-status {
+    background: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    color: var(--primary-dark);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: none;
+    animation: slideIn 0.3s ease-out;
+}
+
+.data-status.show {
+    display: block;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.clear-data-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: var(--transition-standard);
+}
+
+.clear-data-btn:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+}
+
+.restore-banner {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    border-left: 4px solid #4caf50;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.restore-banner h4 {
+    color: #2e7d32;
+    margin: 0 0 8px 0;
+    font-size: 1.1rem;
+}
+
+.restore-banner p {
+    color: #1b5e20;
+    margin: 0;
+}
+
+.restore-banner-buttons {
+    margin-top: 12px;
+    display: flex;
+    gap: 10px;
+}
+
+.restore-btn, .dismiss-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition-standard);
+}
+
+.restore-btn {
+    background: #4caf50;
+    color: white;
+}
+
+.restore-btn:hover {
+    background: #43a047;
+    transform: translateY(-2px);
+}
+
+.dismiss-btn {
+    background: white;
+    color: #2e7d32;
+    border: 2px solid #4caf50;
+}
+
+.dismiss-btn:hover {
+    background: #f1f8e9;
+}
+
+/* PDF/Print Styles */
+.export-pdf-btn {
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-standard);
+    margin: 15px;
+    box-shadow: 0 3px 10px rgba(87, 6, 140, 0.2);
+}
+
+.export-pdf-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(87, 6, 140, 0.3);
+}
+
+/* Print-specific styles */
+@media print {
+    /* Hide everything except the printable content */
+    body * {
+        visibility: hidden;
+    }
+    
+    #printableContent,
+    #printableContent * {
+        visibility: visible;
+    }
+    
+    #printableContent {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+    
+    /* Hide navigation and UI elements */
+    .header,
+    .nav-arrow,
+    .navigation-info,
+    .generate-report-btn,
+    .view-annotations-btn,
+    .export-pdf-btn,
+    .new-comparison-btn,
+    .data-manager,
+    .upload-section {
+        display: none !important;
+    }
+    
+    /* Optimize diff highlighting for print */
+    .deletion {
+        background-color: #ffebee !important;
+        color: #c62828 !important;
+        text-decoration: line-through;
+        border-left: 3px solid #ef5350 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    .addition {
+        background-color: #e8f5e8 !important;
+        color: #2e7d32 !important;
+        border-left: 3px solid #66bb6a !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    .has-annotation {
+        background-color: rgba(87, 6, 140, 0.1) !important;
+        border-bottom: 2px solid #57068c !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    /* Ensure colors print */
+    * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    /* Page breaks */
+    .panel {
+        page-break-after: always;
+        page-break-inside: avoid;
+    }
+    
+    .panel:last-child {
+        page-break-after: auto;
+    }
+    
+    .annotation-in-print {
+        background-color: #f8f9fa !important;
+        border-left: 4px solid #57068c !important;
+        padding: 10px;
+        margin: 10px 0;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    .annotation-in-print-header {
+        font-weight: bold;
+        color: #57068c !important;
+        margin-bottom: 5px;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    .annotation-in-print-text {
+        font-style: italic;
+        color: #333 !important;
+        font-size: 0.9em;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    /* Legend for print */
+    .print-legend {
+        border: 2px solid #333 !important;
+        padding: 15px;
+        margin: 20px 0;
+        background-color: #f8f9fa !important;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    .print-legend h3 {
+        margin-top: 0;
+        color: #57068c !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+.pdf-options-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.pdf-options-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+}
+
+.pdf-options-content h3 {
+    color: var(--primary-dark);
+    margin-bottom: 20px;
+}
+
+.pdf-option {
+    margin: 15px 0;
+    padding: 15px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    transition: var(--transition-standard);
+}
+
+.pdf-option:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(87, 6, 140, 0.05);
+}
+
+.pdf-option input[type="checkbox"] {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.pdf-option label {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--primary-dark);
+}
+
+.pdf-option-description {
+    margin-top: 5px;
+    font-size: 0.9rem;
+    color: #666;
+    margin-left: 28px;
+}
+
+.pdf-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.pdf-generate-btn, .pdf-cancel-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-standard);
+}
+
+.pdf-generate-btn {
+    background: var(--primary-gradient);
+    color: white;
+}
+
+.pdf-generate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(87, 6, 140, 0.3);
+}
+
+.pdf-cancel-btn {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.pdf-cancel-btn:hover {
+    background: #d0d0d0;
+}
 
     </style>
 </head>
@@ -993,10 +1529,12 @@
         <div class="header-title">
             <h1>u even revise, bro?</h1>
         </div>
-        <div class="header-buttons">
-            <button class="about-btn" id="aboutButton">About</button>
-            <button class="new-comparison-btn hidden" id="headerNewComparisonBtn">New Comparison</button>
-        </div>
+       <!-- Replace the existing header-buttons div with this: -->
+<div class="header-buttons">
+    <button class="about-btn" id="aboutButton">About</button>
+    <button class="about-btn" id="clearDataButton" style="background: #dc3545; border-color: #dc3545; color: white;">Clear Data</button>
+    <button class="new-comparison-btn hidden" id="headerNewComparisonBtn">New Comparison</button>
+</div>
     </header>
 
     
@@ -1067,6 +1605,64 @@
                 </div>
             </div>
         </div>
+
+        <!-- Annotations Panel Modal -->
+<div id="annotationsModal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+        <span class="modal-close" id="annotationsModalClose">&times;</span>
+        <h2 style="color: var(--primary-dark); margin-bottom: 20px;">Revision Annotations</h2>
+        <div id="annotationsContent">
+            <!-- Annotations will be displayed here -->
+        </div>
+    </div>
+</div>
+
+<!-- PDF Export Options Modal -->
+<div id="pdfOptionsModal" class="pdf-options-modal">
+    <div class="pdf-options-content">
+        <span class="modal-close" id="pdfOptionsClose">&times;</span>
+        <h3>Export Options</h3>
+        
+        <div class="pdf-option" onclick="document.getElementById('includeAllDrafts').click()">
+            <input type="checkbox" id="includeAllDrafts" checked>
+            <label for="includeAllDrafts">Include all drafts</label>
+            <div class="pdf-option-description">Export all draft versions and their comparisons</div>
+        </div>
+        
+        <div class="pdf-option" onclick="document.getElementById('includeCurrentOnly').click()">
+            <input type="checkbox" id="includeCurrentOnly">
+            <label for="includeCurrentOnly">Current view only</label>
+            <div class="pdf-option-description">Export only the currently visible draft or comparison</div>
+        </div>
+        
+        <div class="pdf-option" onclick="document.getElementById('includeAnnotations').click()">
+            <input type="checkbox" id="includeAnnotations" checked>
+            <label for="includeAnnotations">Include annotations</label>
+            <div class="pdf-option-description">Add your annotation notes to the exported document</div>
+        </div>
+        
+        <div class="pdf-option" onclick="document.getElementById('includeLegend').click()">
+            <input type="checkbox" id="includeLegend" checked>
+            <label for="includeLegend">Include color legend</label>
+            <div class="pdf-option-description">Add a legend explaining the color coding</div>
+        </div>
+        
+        <div class="pdf-buttons">
+            <button class="pdf-generate-btn" id="generatePdfBtn">Generate PDF</button>
+            <button class="pdf-cancel-btn" id="pdfCancelBtn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden printable content area -->
+<div id="printableContent" style="display: none;"></div>
+
+<!-- Data Manager -->
+<div class="data-manager">
+    <div id="dataStatus" class="data-status"></div>
+</div>
+
+<!-- Restore Banner (will be added dynamically) -->
     </div>
 </div>
 
@@ -1234,6 +1830,11 @@ function handleFileUpload(files) {
             showError('Please upload at least 2 files to compare.');
         }
     }
+
+     // Save files to localStorage
+     if (uploadedFiles.length > 0) {
+        saveFileContents(uploadedFiles);
+    }
 }
 
 function addFileToList(file) {
@@ -1324,6 +1925,9 @@ async function compareUploadedFiles() {
         document.getElementById('loadingSpinner').style.display = 'none';
         showError('Error reading files: ' + error.message);
     }
+
+        // Save state after successful comparison
+        saveState();
 }
     async function readFileContent(file) {
     return new Promise((resolve, reject) => {
@@ -1536,6 +2140,19 @@ For technology designers, these questions carry greater weight. Designers must r
                 }
             }
             
+            // At the end of createPanels function, before 'return panels;'
+            // Enable annotations after a short delay to ensure DOM is ready
+            setTimeout(() => {
+                if (panels[0].type === 'diff') {
+                    makeAnnotatable(
+                        essay.title,
+                        essay.drafts[panels[0].fromIndex].version,
+                        essay.drafts[panels[0].toIndex].version
+                    );
+                }
+            }, 100);
+
+
             return panels;
         }
         
@@ -1578,6 +2195,9 @@ For technology designers, these questions carry greater weight. Designers must r
 
             // Hide spinner
             document.getElementById('loadingSpinner').style.display = 'none';
+
+              // Save state
+        saveState();
         }
         
         function updateNavigationInfo(panelInfo) {
@@ -1675,6 +2295,24 @@ For technology designers, these questions carry greater weight. Designers must r
                 
                 updateNavigationInfo(panelInfo);
             }
+            // At the end of updateSliderPosition function
+            // Enable annotations for diff panels
+            setTimeout(() => {
+                const panelInfo = getPanelInfo();
+                const currentPanelInfo = panelInfo[currentPosition];
+                
+                if (currentPanelInfo && currentPanelInfo.type === 'diff' && currentEssay) {
+                    makeAnnotatable(
+                        currentEssay.title,
+                        currentEssay.drafts[currentPanelInfo.fromIndex].version,
+                        currentEssay.drafts[currentPanelInfo.toIndex].version
+                    );
+                }
+            }, 100);
+
+            if (currentEssay) {
+        saveState();
+    }
         }
         
         function switchTab(activeTabId, activeContentId) {
@@ -1690,108 +2328,114 @@ For technology designers, these questions carry greater weight. Designers must r
         }
         
         // Wait for DOM to be loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            // Tab switching
-            document.getElementById('uploadTab').addEventListener('click', function() {
-                switchTab('uploadTab', 'uploadContent');
-            });
-            
-            document.getElementById('examplesTab').addEventListener('click', function() {
-                switchTab('examplesTab', 'examplesContent');
-            });
+        // Wait for DOM to be loaded
+document.addEventListener('DOMContentLoaded', function() {
 
-            // About modal functionality
-            const aboutButton = document.getElementById('aboutButton');
-            const aboutModal = document.getElementById('aboutModal');
-            const aboutModalClose = document.getElementById('aboutModalClose');
+     // Load saved data
+     loadAnnotations();
+    
+    // Show restore banner if there's saved data
+    showRestoreBanner();
+    
+    // Clear data button
+    const clearDataButton = document.getElementById('clearDataButton');
+    if (clearDataButton) {
+        clearDataButton.addEventListener('click', clearAllData);
+    }
+  
+    // Tab switching
+    document.getElementById('uploadTab').addEventListener('click', function() {
+        switchTab('uploadTab', 'uploadContent');
+    });
+    
+    document.getElementById('examplesTab').addEventListener('click', function() {
+        switchTab('examplesTab', 'examplesContent');
+    });
 
-            aboutButton.addEventListener('click', function() {
-                aboutModal.style.display = 'block';
-            });
+    // About modal functionality
+    const aboutButton = document.getElementById('aboutButton');
+    const aboutModal = document.getElementById('aboutModal');
+    const aboutModalClose = document.getElementById('aboutModalClose');
 
-            aboutModalClose.addEventListener('click', function() {
-                aboutModal.style.display = 'none';
-            });
+    aboutButton.addEventListener('click', function() {
+        aboutModal.style.display = 'block';
+    });
 
-            // Close modal when clicking outside the content
-            window.addEventListener('click', function(event) {
-                if (event.target === aboutModal) {
-                    aboutModal.style.display = 'none';
-                }
-            });
+    aboutModalClose.addEventListener('click', function() {
+        aboutModal.style.display = 'none';
+    });
 
-            // File upload event listeners
-            const fileInput = document.getElementById('fileInput');
-            const fileInputContainer = document.querySelector('.file-input-container');
-            const compareFilesBtn = document.getElementById('compareFiles');
+    // File upload event listeners
+    const fileInput = document.getElementById('fileInput');
+    const fileInputContainer = document.querySelector('.file-input-container');
+    const compareFilesBtn = document.getElementById('compareFiles');
 
-            fileInput.addEventListener('change', function(e) {
-                handleFileUpload(e.target.files);
-            });
+    fileInput.addEventListener('change', function(e) {
+        handleFileUpload(e.target.files);
+    });
 
-            // Drag and drop functionality
-            fileInputContainer.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                this.style.borderColor = 'var(--primary-color)';
-                this.style.backgroundColor = 'rgba(87, 6, 140, 0.05)';
-            });
+    // Drag and drop functionality
+    fileInputContainer.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        this.style.borderColor = 'var(--primary-color)';
+        this.style.backgroundColor = 'rgba(87, 6, 140, 0.05)';
+    });
 
-            fileInputContainer.addEventListener('dragleave', function(e) {
-                e.preventDefault();
-                this.style.borderColor = 'var(--accent-light)';
-                this.style.backgroundColor = 'transparent';
-            });
+    fileInputContainer.addEventListener('dragleave', function(e) {
+        e.preventDefault();
+        this.style.borderColor = 'var(--accent-light)';
+        this.style.backgroundColor = 'transparent';
+    });
 
-            fileInputContainer.addEventListener('drop', function(e) {
-                e.preventDefault();
-                this.style.borderColor = 'var(--accent-light)';
-                this.style.backgroundColor = 'transparent';
-                handleFileUpload(e.dataTransfer.files);
-            });
+    fileInputContainer.addEventListener('drop', function(e) {
+        e.preventDefault();
+        this.style.borderColor = 'var(--accent-light)';
+        this.style.backgroundColor = 'transparent';
+        handleFileUpload(e.dataTransfer.files);
+    });
 
-            compareFilesBtn.addEventListener('click', compareUploadedFiles);
-                        
-            // Example essay functionality
-            const exampleCards = document.querySelectorAll('.example-card');
-            exampleCards.forEach(card => {
-                const analyzeBtn = card.querySelector('.example-btn');
+    compareFilesBtn.addEventListener('click', compareUploadedFiles);
                 
-                analyzeBtn.addEventListener('click', function() {
-                    const essayId = card.getAttribute('data-essay');
-                    loadExampleEssay(essayId);
-                });
-            });
-            
-            // Navigation arrows
-            document.getElementById('leftArrow').addEventListener('click', function() {
-                if (currentPosition > 0) {
-                    currentPosition--;
-                    updateSliderPosition();
-                }
-            });
-            
-            document.getElementById('rightArrow').addEventListener('click', function() {
-                if (currentPosition < totalPanels - 1) {
-                    currentPosition++;
-                    updateSliderPosition();
-                }
-            });
-            
-            // Keyboard navigation
-            document.addEventListener('keydown', function(e) {
-                if (document.getElementById('comparisonResults').style.display !== 'none') {
-                    if (e.key === 'ArrowLeft' && currentPosition > 0) {
-                        currentPosition--;
-                        updateSliderPosition();
-                    } else if (e.key === 'ArrowRight' && currentPosition < totalPanels - 1) {
-                        currentPosition++;
-                        updateSliderPosition();
-                    }
-                }
-            });
+    // Example essay functionality
+    const exampleCards = document.querySelectorAll('.example-card');
+    exampleCards.forEach(card => {
+        const analyzeBtn = card.querySelector('.example-btn');
+        
+        analyzeBtn.addEventListener('click', function() {
+            const essayId = card.getAttribute('data-essay');
+            loadExampleEssay(essayId);
+        });
+    });
+    
+    // Navigation arrows
+    document.getElementById('leftArrow').addEventListener('click', function() {
+        if (currentPosition > 0) {
+            currentPosition--;
+            updateSliderPosition();
+        }
+    });
+    
+    document.getElementById('rightArrow').addEventListener('click', function() {
+        if (currentPosition < totalPanels - 1) {
+            currentPosition++;
+            updateSliderPosition();
+        }
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (document.getElementById('comparisonResults').style.display !== 'none') {
+            if (e.key === 'ArrowLeft' && currentPosition > 0) {
+                currentPosition--;
+                updateSliderPosition();
+            } else if (e.key === 'ArrowRight' && currentPosition < totalPanels - 1) {
+                currentPosition++;
+                updateSliderPosition();
+            }
+        }
+    });
 
-
-              // Modal close functionality for revision report
+    // Revision Report Modal functionality
     const reportModal = document.getElementById('revisionReportModal');
     const reportModalClose = document.getElementById('reportModalClose');
     
@@ -1801,14 +2445,61 @@ For technology designers, these questions carry greater weight. Designers must r
         });
     }
     
-    // Close modal when clicking outside
+    // Annotations Modal functionality
+    const annotationsModal = document.getElementById('annotationsModal');
+    const annotationsModalClose = document.getElementById('annotationsModalClose');
+    
+    if (annotationsModalClose) {
+        annotationsModalClose.addEventListener('click', function() {
+            annotationsModal.style.display = 'none';
+        });
+    }
+    
+    // Close modals when clicking outside
     window.addEventListener('click', function(event) {
+        if (event.target === aboutModal) {
+            aboutModal.style.display = 'none';
+        }
         if (event.target === reportModal) {
             reportModal.style.display = 'none';
         }
+        if (event.target === annotationsModal) {
+            annotationsModal.style.display = 'none';
+        }
+    });
+
+    // Add this section in DOMContentLoaded, after the annotations modal setup:
+
+    // PDF Options Modal
+    const pdfOptionsModal = document.getElementById('pdfOptionsModal');
+    const pdfOptionsClose = document.getElementById('pdfOptionsClose');
+    const generatePdfBtn = document.getElementById('generatePdfBtn');
+    const pdfCancelBtn = document.getElementById('pdfCancelBtn');
+    
+    if (pdfOptionsClose) {
+        pdfOptionsClose.addEventListener('click', function() {
+            pdfOptionsModal.style.display = 'none';
+        });
+    }
+    
+    if (generatePdfBtn) {
+        generatePdfBtn.addEventListener('click', exportToPdf);
+    }
+    
+    if (pdfCancelBtn) {
+        pdfCancelBtn.addEventListener('click', function() {
+            pdfOptionsModal.style.display = 'none';
+        });
+    }
+    
+    // Close PDF modal when clicking outside
+    window.addEventListener('click', function(event) {
+        if (event.target === pdfOptionsModal) {
+            pdfOptionsModal.style.display = 'none';
+        }
     });
     
-    // Toggle between table and detail view (update these existing functions)
+    // Toggle between table and detail view for revision report
     const tableViewBtn = document.getElementById('tableViewBtn');
     const detailViewBtn = document.getElementById('detailViewBtn');
     
@@ -1839,7 +2530,59 @@ For technology designers, these questions carry greater weight. Designers must r
             }
         });
     }
-        });
+    
+    // Add generate report button to the diff panels
+    const addReportButton = () => {
+        const comparisonResults = document.getElementById('comparisonResults');
+        if (comparisonResults && !document.getElementById('generateReportBtn')) {
+            const btn = document.createElement('button');
+            btn.id = 'generateReportBtn';
+            btn.className = 'generate-report-btn';
+            btn.textContent = 'Generate Revision Report';
+            btn.onclick = generateRevisionReport;
+            comparisonResults.appendChild(btn);
+        }
+    };
+    
+// Add view annotations button
+const addAnnotationsButton = () => {
+    const comparisonResults = document.getElementById('comparisonResults');
+    if (comparisonResults && !document.getElementById('viewAnnotationsBtn')) {
+        const btn = document.createElement('button');
+        btn.id = 'viewAnnotationsBtn';
+        btn.className = 'view-annotations-btn';
+        btn.textContent = 'View Annotations';
+        btn.onclick = displayAnnotations;
+        comparisonResults.appendChild(btn);
+    }
+};
+
+// ADD THIS NEW FUNCTION HERE:
+const addPdfExportButton = () => {
+    const comparisonResults = document.getElementById('comparisonResults');
+    if (comparisonResults && !document.getElementById('exportPdfBtn')) {
+        const btn = document.createElement('button');
+        btn.id = 'exportPdfBtn';
+        btn.className = 'export-pdf-btn';
+        btn.textContent = '📄 Export as PDF';
+        btn.onclick = showPdfOptions;
+        comparisonResults.appendChild(btn);
+    }
+};
+
+// Check periodically if comparison results are shown
+const observer = new MutationObserver(() => {
+    if (document.getElementById('comparisonResults').style.display !== 'none') {
+        addReportButton();
+        addAnnotationsButton();
+        addPdfExportButton();  // <-- Make sure this line is here!
+    }
+});
+
+observer.observe(document.getElementById('comparisonResults'), {
+    attributes: true,
+    attributeFilter: ['style']
+})});
 
         // Data structure to store revision analysis
         let revisionAnalysis = {
@@ -1877,6 +2620,723 @@ function analyzeRevisions(diffHtml) {
     });
     
     return revisionAnalysis;
+}
+// Enhanced Data Persistence System
+let annotations = {};
+let savedState = null;
+
+// Save state to localStorage
+function saveState() {
+    try {
+        const state = {
+            currentEssay: currentEssay,
+            currentPosition: currentPosition,
+            uploadedFiles: uploadedFiles.map(file => ({
+                name: file.name,
+                type: file.type,
+                size: file.size
+            })),
+            timestamp: new Date().toISOString()
+        };
+        
+        localStorage.setItem('revisionToolState', JSON.stringify(state));
+        showDataStatus('State saved ✓');
+    } catch (e) {
+        console.error('Error saving state:', e);
+        if (e.name === 'QuotaExceededError') {
+            showDataStatus('Storage full - please clear old data', true);
+        }
+    }
+}
+
+// Save file contents to localStorage
+async function saveFileContents(files) {
+    try {
+        const fileData = [];
+        
+        for (let file of files) {
+            const content = await readFileContent(file);
+            fileData.push({
+                name: file.name,
+                type: file.type,
+                content: content,
+                size: file.size
+            });
+        }
+        
+        localStorage.setItem('revisionToolFiles', JSON.stringify(fileData));
+        showDataStatus('Files saved ✓');
+    } catch (e) {
+        console.error('Error saving files:', e);
+        if (e.name === 'QuotaExceededError') {
+            showDataStatus('Files too large for storage', true);
+        }
+    }
+}
+
+// Load file contents from localStorage
+function loadFileContents() {
+    try {
+        const stored = localStorage.getItem('revisionToolFiles');
+        if (stored) {
+            return JSON.parse(stored);
+        }
+    } catch (e) {
+        console.error('Error loading files:', e);
+    }
+    return null;
+}
+
+// Load state from localStorage
+function loadState() {
+    try {
+        const stored = localStorage.getItem('revisionToolState');
+        if (stored) {
+            savedState = JSON.parse(stored);
+            return savedState;
+        }
+    } catch (e) {
+        console.error('Error loading state:', e);
+    }
+    return null;
+}
+
+// Load annotations from localStorage
+function loadAnnotations() {
+    try {
+        const stored = localStorage.getItem('revisionAnnotations');
+        if (stored) {
+            annotations = JSON.parse(stored);
+        }
+    } catch (e) {
+        console.error('Error loading annotations:', e);
+        annotations = {};
+    }
+}
+
+// Save annotations to localStorage
+function saveAnnotations() {
+    try {
+        localStorage.setItem('revisionAnnotations', JSON.stringify(annotations));
+        showDataStatus('Annotations saved ✓');
+    } catch (e) {
+        console.error('Error saving annotations:', e);
+    }
+}
+
+// Show data status message
+function showDataStatus(message, isError = false) {
+    const statusEl = document.getElementById('dataStatus');
+    if (!statusEl) return;
+    
+    statusEl.textContent = message;
+    statusEl.style.borderColor = isError ? '#dc3545' : 'var(--primary-color)';
+    statusEl.style.color = isError ? '#dc3545' : 'var(--primary-dark)';
+    statusEl.classList.add('show');
+    
+    setTimeout(() => {
+        statusEl.classList.remove('show');
+    }, 3000);
+}
+
+// Show restore banner
+function showRestoreBanner() {
+    const state = loadState();
+    const files = loadFileContents();
+    
+    if (!state && !files) return;
+    
+    const container = document.querySelector('.container');
+    const banner = document.createElement('div');
+    banner.className = 'restore-banner';
+    banner.id = 'restoreBanner';
+    
+    let message = 'Previous session found! ';
+    if (state && state.currentEssay) {
+        const date = new Date(state.timestamp).toLocaleString();
+        message += `You were working on "${state.currentEssay.title}" (${date}).`;
+    } else if (files) {
+        message += `You have ${files.length} saved file(s).`;
+    }
+    
+    banner.innerHTML = `
+        <h4>🔄 Resume Previous Session?</h4>
+        <p>${message}</p>
+        <div class="restore-banner-buttons">
+            <button class="restore-btn" id="restoreSession">Restore Session</button>
+            <button class="dismiss-btn" id="dismissRestore">Start Fresh</button>
+        </div>
+    `;
+    
+    container.insertBefore(banner, container.firstChild);
+    
+    // Restore button
+    document.getElementById('restoreSession').addEventListener('click', async function() {
+        await restoreSession();
+        banner.remove();
+    });
+    
+    // Dismiss button
+    document.getElementById('dismissRestore').addEventListener('click', function() {
+        banner.remove();
+    });
+}
+
+// Restore previous session
+async function restoreSession() {
+    const state = loadState();
+    const files = loadFileContents();
+    
+    if (!state && !files) {
+        showDataStatus('No saved session found', true);
+        return;
+    }
+    
+    // Show loading
+    document.getElementById('loadingSpinner').style.display = 'flex';
+    
+    try {
+        if (state && state.currentEssay) {
+            currentEssay = state.currentEssay;
+            
+            // Hide upload section
+            const uploadSection = document.querySelector('.upload-section');
+            if (uploadSection) uploadSection.classList.add('hidden');
+            
+            // Recreate panels
+            const panelInfo = createPanels(currentEssay);
+            totalPanels = panelInfo.length;
+            currentPosition = state.currentPosition || 0;
+            
+            // Show comparison results
+            const comparisonResults = document.getElementById('comparisonResults');
+            comparisonResults.style.display = 'block';
+            updateSliderPosition();
+            updateNavigationInfo(panelInfo);
+            
+            setupNewComparisonButton();
+            
+            showDataStatus('Session restored! ✓');
+        } else if (files && files.length > 0) {
+            // Restore uploaded files
+            uploadedFiles = files;
+            
+            // Show file list
+            const fileList = document.getElementById('fileList');
+            const compareBtn = document.getElementById('compareFiles');
+            
+            fileList.innerHTML = '';
+            files.forEach(fileData => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <div>
+                        <div class="file-name">${fileData.name}</div>
+                        <div class="file-size">${(fileData.size / 1024).toFixed(1)} KB</div>
+                    </div>
+                    <button class="remove-file" onclick="removeRestoredFile('${fileData.name}')">×</button>
+                `;
+                fileList.appendChild(fileItem);
+            });
+            
+            fileList.style.display = 'block';
+            if (files.length >= 2) {
+                compareBtn.style.display = 'block';
+            }
+            
+            showDataStatus(`${files.length} file(s) restored ✓`);
+        }
+    } catch (error) {
+        console.error('Error restoring session:', error);
+        showDataStatus('Error restoring session', true);
+    } finally {
+        document.getElementById('loadingSpinner').style.display = 'none';
+    }
+}
+
+// Remove restored file
+window.removeRestoredFile = function(fileName) {
+    uploadedFiles = uploadedFiles.filter(file => file.name !== fileName);
+    
+    const fileList = document.getElementById('fileList');
+    const compareBtn = document.getElementById('compareFiles');
+    
+    fileList.innerHTML = '';
+    
+    if (uploadedFiles.length === 0) {
+        fileList.style.display = 'none';
+        compareBtn.style.display = 'none';
+        localStorage.removeItem('revisionToolFiles');
+    } else {
+        uploadedFiles.forEach(fileData => {
+            const fileItem = document.createElement('div');
+            fileItem.className = 'file-item';
+            fileItem.innerHTML = `
+                <div>
+                    <div class="file-name">${fileData.name}</div>
+                    <div class="file-size">${(fileData.size / 1024).toFixed(1)} KB</div>
+                </div>
+                <button class="remove-file" onclick="removeRestoredFile('${fileData.name}')">×</button>
+            `;
+            fileList.appendChild(fileItem);
+        });
+        compareBtn.style.display = uploadedFiles.length >= 2 ? 'block' : 'none';
+        saveFileContents(uploadedFiles);
+    }
+};
+
+// Clear all saved data
+function clearAllData() {
+    if (confirm('Clear all saved data? This will remove your saved files, annotations, and session state.')) {
+        localStorage.removeItem('revisionToolState');
+        localStorage.removeItem('revisionToolFiles');
+        localStorage.removeItem('revisionAnnotations');
+        annotations = {};
+        savedState = null;
+        showDataStatus('All data cleared ✓');
+        
+        // Reload page
+        setTimeout(() => {
+            window.location.reload();
+        }, 1500);
+    }
+}
+
+// Generate unique ID for annotation based on essay, drafts, and text
+function getAnnotationId(essayTitle, fromDraft, toDraft, text) {
+    const cleanText = text.substring(0, 50).trim();
+    return `${essayTitle}|${fromDraft}|${toDraft}|${cleanText}`;
+}
+
+// Show annotation popup
+// Show annotation popup (REPLACE ENTIRE FUNCTION)
+function showAnnotationPopup(element, annotationId, existingNote = '') {
+    // Remove any existing popup
+    const existingPopup = document.querySelector('.annotation-popup');
+    if (existingPopup) {
+        existingPopup.remove();
+    }
+
+    const popup = document.createElement('div');
+    popup.className = 'annotation-popup';
+    
+    popup.innerHTML = `
+        <h4>Add Annotation</h4>
+        <textarea id="annotationText" placeholder="Why did you make this change? What were you trying to achieve?">${existingNote}</textarea>
+        <div class="annotation-popup-buttons">
+            <button class="annotation-save-btn" id="saveAnnotation">Save</button>
+            <button class="annotation-cancel-btn" id="cancelAnnotation">Cancel</button>
+            ${existingNote ? '<button class="annotation-delete-btn" id="deleteAnnotation">Delete</button>' : ''}
+        </div>
+    `;
+    
+    document.body.appendChild(popup);
+    
+    // Smart positioning - calculate after adding to DOM so we know popup dimensions
+    const rect = element.getBoundingClientRect();
+    const popupRect = popup.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+    const viewportWidth = window.innerWidth;
+    const scrollY = window.scrollY;
+    const scrollX = window.scrollX;
+    
+    // Determine vertical position
+    let top;
+    const spaceBelow = viewportHeight - rect.bottom;
+    const spaceAbove = rect.top;
+    
+    if (spaceBelow >= popupRect.height + 20) {
+        // Enough space below - place it below the element
+        top = rect.bottom + scrollY + 10;
+    } else if (spaceAbove >= popupRect.height + 20) {
+        // Not enough space below but enough above - place it above
+        top = rect.top + scrollY - popupRect.height - 10;
+    } else {
+        // Not enough space either way - center it vertically in viewport
+        top = scrollY + (viewportHeight - popupRect.height) / 2;
+    }
+    
+    // Determine horizontal position
+    let left = rect.left + scrollX;
+    
+    // Make sure popup doesn't go off right edge
+    if (left + popupRect.width > viewportWidth + scrollX) {
+        left = viewportWidth + scrollX - popupRect.width - 20;
+    }
+    
+    // Make sure popup doesn't go off left edge
+    if (left < scrollX + 20) {
+        left = scrollX + 20;
+    }
+    
+    popup.style.position = 'absolute';
+    popup.style.left = `${left}px`;
+    popup.style.top = `${top}px`;
+    
+    // Focus textarea
+    const textarea = popup.querySelector('#annotationText');
+    textarea.focus();
+    
+    // Save button
+    document.getElementById('saveAnnotation').onclick = function() {
+        const note = textarea.value.trim();
+        if (note) {
+            annotations[annotationId] = {
+                note: note,
+                text: element.textContent,
+                timestamp: new Date().toISOString()
+            };
+            saveAnnotations();
+            element.classList.add('has-annotation');
+            popup.remove();
+        }
+    };
+    
+    // Cancel button
+    document.getElementById('cancelAnnotation').onclick = function() {
+        popup.remove();
+    };
+    
+    // Delete button
+    const deleteBtn = document.getElementById('deleteAnnotation');
+    if (deleteBtn) {
+        deleteBtn.onclick = function() {
+            delete annotations[annotationId];
+            saveAnnotations();
+            element.classList.remove('has-annotation');
+            popup.remove();
+        };
+    }
+    
+    // Close on click outside
+    setTimeout(() => {
+        document.addEventListener('click', function closePopup(e) {
+            if (!popup.contains(e.target) && e.target !== element) {
+                popup.remove();
+                document.removeEventListener('click', closePopup);
+            }
+        });
+    }, 100);
+}
+
+// Make diff elements annotatable
+function makeAnnotatable(essayTitle, fromDraft, toDraft) {
+    const diffPanel = document.querySelector('.comparison-slider').children[currentPosition];
+    if (!diffPanel || !diffPanel.classList.contains('diff-panel')) return;
+    
+    const additions = diffPanel.querySelectorAll('.addition');
+    const deletions = diffPanel.querySelectorAll('.deletion');
+    
+    [...additions, ...deletions].forEach(element => {
+        const text = element.textContent;
+        const annotationId = getAnnotationId(essayTitle, fromDraft, toDraft, text);
+        
+        element.classList.add('annotatable');
+        
+        // Check if annotation exists
+        if (annotations[annotationId]) {
+            element.classList.add('has-annotation');
+        }
+        
+        element.onclick = function(e) {
+            e.stopPropagation();
+            const existingNote = annotations[annotationId]?.note || '';
+            showAnnotationPopup(element, annotationId, existingNote);
+        };
+    });
+}
+
+// Display all annotations for current comparison
+function displayAnnotations() {
+    const modal = document.getElementById('annotationsModal');
+    const content = document.getElementById('annotationsContent');
+    
+    if (!currentEssay) {
+        content.innerHTML = '<p>No essay loaded.</p>';
+        modal.style.display = 'block';
+        return;
+    }
+    
+    const currentPanel = document.querySelector('.comparison-slider').children[currentPosition];
+    if (!currentPanel || !currentPanel.classList.contains('diff-panel')) {
+        content.innerHTML = '<p>Navigate to a changes view to see annotations.</p>';
+        modal.style.display = 'block';
+        return;
+    }
+    
+    // Get current draft info
+    const panelInfo = getPanelInfo();
+    const panel = panelInfo[currentPosition];
+    
+    if (panel.type !== 'diff') {
+        content.innerHTML = '<p>Navigate to a changes view to see annotations.</p>';
+        modal.style.display = 'block';
+        return;
+    }
+    
+    const fromDraft = currentEssay.drafts[panel.fromIndex].version;
+    const toDraft = currentEssay.drafts[panel.toIndex].version;
+    
+    // Find relevant annotations
+    const relevantAnnotations = Object.entries(annotations).filter(([id]) => {
+        return id.startsWith(`${currentEssay.title}|${fromDraft}|${toDraft}`);
+    });
+    
+    if (relevantAnnotations.length === 0) {
+        content.innerHTML = `
+            <div class="annotations-panel">
+                <p>No annotations yet for this comparison.</p>
+                <p style="margin-top: 10px; color: #666;">
+                    <strong>Tip:</strong> Click on any highlighted addition or deletion in the changes view to add an annotation.
+                </p>
+            </div>
+        `;
+    } else {
+        let html = `<div class="annotations-panel">
+            <p style="margin-bottom: 20px; color: #666;">
+                Showing ${relevantAnnotations.length} annotation(s) for ${fromDraft} → ${toDraft}
+            </p>`;
+        
+        relevantAnnotations.forEach(([id, data]) => {
+            html += `
+                <div class="annotation-item">
+                    <div class="annotation-item-header">Revised text:</div>
+                    <div class="annotation-item-text">"${data.text.substring(0, 100)}${data.text.length > 100 ? '...' : ''}"</div>
+                    <div class="annotation-item-header">Your note:</div>
+                    <div class="annotation-item-note">${data.note}</div>
+                    <div style="margin-top: 8px; font-size: 0.85rem; color: #999;">
+                        ${new Date(data.timestamp).toLocaleString()}
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        content.innerHTML = html;
+    }
+    
+    modal.style.display = 'block';
+}
+
+// PDF Export Functions
+
+function showPdfOptions() {
+    const currentPanel = document.querySelector('.comparison-slider').children[currentPosition];
+    
+    if (!currentEssay && !currentPanel) {
+        alert('Please load an essay or upload files first.');
+        return;
+    }
+    
+    // Show modal
+    document.getElementById('pdfOptionsModal').style.display = 'block';
+    
+    // Make options mutually exclusive for all drafts vs current only
+    const allDraftsCheckbox = document.getElementById('includeAllDrafts');
+    const currentOnlyCheckbox = document.getElementById('includeCurrentOnly');
+    
+    allDraftsCheckbox.onchange = function() {
+        if (this.checked) {
+            currentOnlyCheckbox.checked = false;
+        }
+    };
+    
+    currentOnlyCheckbox.onchange = function() {
+        if (this.checked) {
+            allDraftsCheckbox.checked = false;
+        } else {
+            allDraftsCheckbox.checked = true;
+        }
+    };
+}
+
+function generatePrintableContent() {
+    const includeAllDrafts = document.getElementById('includeAllDrafts').checked;
+    const includeCurrentOnly = document.getElementById('includeCurrentOnly').checked;
+    const includeAnnotations = document.getElementById('includeAnnotations').checked;
+    const includeLegend = document.getElementById('includeLegend').checked;
+    
+    const printableDiv = document.getElementById('printableContent');
+    let html = '';
+    
+    // Add title
+    if (currentEssay) {
+        html += `<div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #57068c; margin-bottom: 10px;">${currentEssay.title}</h1>
+            <p style="color: #666; font-style: italic;">${currentEssay.author}</p>
+            <p style="color: #999; font-size: 0.9em;">Generated on ${new Date().toLocaleString()}</p>
+        </div>`;
+    }
+    
+    // Add legend
+    if (includeLegend) {
+        html += `<div class="print-legend">
+            <h3>Color Legend</h3>
+            <p><span class="deletion word-level">Deleted text</span> - Text removed from previous draft</p>
+            <p><span class="addition word-level">Added text</span> - Text added in revision</p>
+            ${includeAnnotations ? '<p><span class="has-annotation">Annotated text 📝</span> - Text with revision notes</p>' : ''}
+        </div>`;
+    }
+    
+    if (includeCurrentOnly) {
+        // Export only current view
+        const currentPanel = document.querySelector('.comparison-slider').children[currentPosition];
+        const panelInfo = getPanelInfo();
+        const currentPanelInfo = panelInfo[currentPosition];
+        
+        if (currentPanelInfo.type === 'draft') {
+            html += generateDraftForPrint(currentEssay.drafts[currentPanelInfo.index]);
+        } else if (currentPanelInfo.type === 'diff') {
+            html += generateDiffForPrint(
+                currentEssay.drafts[currentPanelInfo.fromIndex],
+                currentEssay.drafts[currentPanelInfo.toIndex],
+                currentPanel,
+                includeAnnotations
+            );
+        }
+    } else if (includeAllDrafts) {
+        // Export all drafts
+        const slider = document.getElementById('comparisonSlider');
+        const panels = Array.from(slider.children);
+        const panelInfo = getPanelInfo();
+        
+        panelInfo.forEach((info, index) => {
+            if (info.type === 'draft') {
+                html += generateDraftForPrint(currentEssay.drafts[info.index]);
+            } else if (info.type === 'diff') {
+                html += generateDiffForPrint(
+                    currentEssay.drafts[info.fromIndex],
+                    currentEssay.drafts[info.toIndex],
+                    panels[index],
+                    includeAnnotations
+                );
+            }
+        });
+    }
+    
+    printableDiv.innerHTML = html;
+}
+
+function generateDraftForPrint(draft) {
+    return `
+        <div class="panel" style="margin-bottom: 40px; padding: 20px;">
+            <h2 style="color: #57068c; border-bottom: 2px solid #57068c; padding-bottom: 10px;">${draft.version}</h2>
+            <div class="panel-content" style="margin-top: 20px; line-height: 1.8;">
+                ${formatText(draft.text)}
+            </div>
+        </div>
+    `;
+}
+
+function generateDiffForPrint(fromDraft, toDraft, panelElement, includeAnnotations) {
+    let html = `
+        <div class="panel diff-panel" style="margin-bottom: 40px; padding: 20px; background-color: #fafafa;">
+            <h2 style="color: #57068c; border-bottom: 2px solid #57068c; padding-bottom: 10px;">
+                Changes: ${fromDraft.version} → ${toDraft.version}
+            </h2>
+            <div class="panel-content" style="margin-top: 20px; line-height: 1.8;">
+    `;
+    
+    // Get the diff content from the panel
+    const diffContent = panelElement.querySelector('.panel-content').innerHTML;
+    html += diffContent;
+    
+    // Add annotations if requested
+    if (includeAnnotations) {
+        const relevantAnnotations = getAnnotationsForDiff(fromDraft.version, toDraft.version);
+        
+        if (relevantAnnotations.length > 0) {
+            html += `
+                <div style="margin-top: 40px; page-break-before: avoid;">
+                    <h3 style="color: #57068c; border-bottom: 1px solid #57068c; padding-bottom: 5px;">
+                        Revision Notes
+                    </h3>
+            `;
+            
+            relevantAnnotations.forEach(([id, data]) => {
+                html += `
+                    <div class="annotation-in-print">
+                        <div class="annotation-in-print-header">📝 "${data.text.substring(0, 80)}${data.text.length > 80 ? '...' : ''}"</div>
+                        <div class="annotation-in-print-text">${data.note}</div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+        }
+    }
+    
+    html += '</div></div>';
+    return html;
+}
+
+function getAnnotationsForDiff(fromDraft, toDraft) {
+    if (!currentEssay) return [];
+    
+    return Object.entries(annotations).filter(([id]) => {
+        return id.startsWith(`${currentEssay.title}|${fromDraft}|${toDraft}`);
+    });
+}
+
+function exportToPdf() {
+    // Generate the content
+    generatePrintableContent();
+    
+    // Show the printable content temporarily
+    const printableDiv = document.getElementById('printableContent');
+    printableDiv.style.display = 'block';
+    
+    // Close the modal
+    document.getElementById('pdfOptionsModal').style.display = 'none';
+    
+    // Small delay to ensure content is rendered
+    setTimeout(() => {
+        // Trigger print dialog
+        window.print();
+        
+        // Hide printable content after printing
+        setTimeout(() => {
+            printableDiv.style.display = 'none';
+        }, 500);
+    }, 250);
+}
+
+// Helper function to get panel info
+function getPanelInfo() {
+    const slider = document.getElementById('comparisonSlider');
+    const panels = Array.from(slider.children);
+    const panelInfo = [];
+    
+    let draftIndex = 0;
+    for (let i = 0; i < panels.length; i++) {
+        if (i % 2 === 0) {
+            panelInfo.push({ type: 'draft', index: draftIndex });
+            draftIndex++;
+        } else {
+            panelInfo.push({ type: 'diff', fromIndex: draftIndex - 1, toIndex: draftIndex });
+        }
+    }
+    
+    return panelInfo;
+}
+
+// Helper function to get panel info
+function getPanelInfo() {
+    const slider = document.getElementById('comparisonSlider');
+    const panels = Array.from(slider.children);
+    const panelInfo = [];
+    
+    let draftIndex = 0;
+    for (let i = 0; i < panels.length; i++) {
+        if (i % 2 === 0) {
+            panelInfo.push({ type: 'draft', index: draftIndex });
+            draftIndex++;
+        } else {
+            panelInfo.push({ type: 'diff', fromIndex: draftIndex - 1, toIndex: draftIndex });
+        }
+    }
+    
+    return panelInfo;
 }
 
 // Function to generate table view
