@@ -87,6 +87,62 @@
         .hidden {
             display: none !important;
         }
+        
+        .generate-report-btn {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-standard);
+            margin: 15px;
+            box-shadow: 0 3px 10px rgba(87, 6, 140, 0.2);
+        }
+        
+        .generate-report-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(87, 6, 140, 0.3);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .modal-close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .modal-close:hover,
+        .modal-close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
         :root {
             --primary-color: #57068c;
             --primary-dark: #330662;
@@ -452,20 +508,6 @@
     padding: 2px 4px;
     border-radius: 3px;
     border-left: 3px solid #ef5350;
-}
-
-.relocated {
-    border-left: 4px solid #9c6fb6 !important;
-    background-color: #f3f0f7 !important;
-    color: #57068c !important;
-}
-
-.deletion.relocated {
-    text-decoration: line-through;
-}
-
-.addition.relocated {
-    text-decoration: underline;
 }
 
 .diff-legend {
@@ -871,9 +913,6 @@
     border-left-color: #ef5350;
 }
 
-.revision-item.relocation {
-    border-left-color: #9c6fb6;
-}
 
 .revision-text {
     font-family: 'Courier New', monospace;
@@ -1033,50 +1072,29 @@
 
 
     <!-- About Modal -->
-<div id="aboutModal" class="modal">
-    <div class="modal-content">
-        <span class="modal-close" id="aboutModalClose">&times;</span>
-        <h2>About This Revision Analysis Tool</h2>
-        <div>
-            <h3>Understanding How We Revise</h3>
-            <p>This tool helps students analyze their revision patterns by comparing multiple drafts of their writing. By visualizing the types of changes made between drafts, students can better understand their current revision habits and learn to develop more sophisticated revision strategies.</p>
-            
-            <h3>The Research Behind This Tool</h3>
-            <p>Writing researcher Nancy Sommers conducted a landmark study comparing how student writers and experienced writers approach revision. Her findings, published in <em>College Composition and Communication</em> (1980), revealed significant differences in revision strategies:</p>
-            
-            <h4>Student Writers Typically:</h4>
-            <ul>
-                <li><strong>Focus on word-level changes</strong> - primarily substituting individual words and fixing surface errors</li>
-                <li><strong>View revision as "cleaning up"</strong> - treating revision as editing rather than discovery</li>
-                <li><strong>Lack strategies for large-scale revision</strong> - struggle to see opportunities for structural changes</li>
-                <li><strong>Stop revising when surface rules are satisfied</strong> - rather than when meaning is fully developed</li>
-            </ul>
-            
-            <h4>Experienced Writers:</h4>
-            <ul>
-                <li><strong>Focus on finding the form of their argument</strong> - making structural and conceptual changes</li>
-                <li><strong>Consider their audience</strong> - revising based on reader expectations and needs</li>
-                <li><strong>See revision as meaning-making</strong> - using revision to discover and develop ideas</li>
-                <li><strong>Employ recursive strategies</strong> - cycling through different levels of revision</li>
-            </ul>
-            
-            <h3>Important Insight</h3>
-            <p>Sommers found that students aren't lazy or unwilling to revise. Rather, they <strong>"do what they have been taught to do in a consistently narrow and predictable way"</strong> and lack strategies for handling larger structural issues. As one student in Sommers' study noted: <em>"I knew something larger was wrong, but I didn't think it would help to move words around."</em></p>
-            
-            <h3>How This Tool Helps</h3>
-            <p>By examining the types and levels of changes made across drafts, this tool helps students:</p>
-            <ul>
-                <li>Recognize their current revision patterns</li>
-                <li>Identify opportunities for more substantial revisions</li>
-                <li>Understand the difference between editing and true revision</li>
-                <li>Develop strategies for structural and conceptual changes</li>
-                <li>Move toward the holistic revision practices of experienced writers</li>
-            </ul>
-            
-            <p class="citation"><strong>Source:</strong> Sommers, Nancy. "Revision Strategies of Student Writers and Experienced Adult Writers." <em>College Composition and Communication</em>, vol. 31, no. 4, 1980, pp. 378-388.</p>
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" id="aboutModalClose">&times;</span>
+            <h3>What is this site for?</h3>
+            <div>
+                <p>Expert writers often say that writing is 99 percent revision. That's not just a comment on the difficulty of writing well. This idea also carries major implications for how writing skills are developed.</p>
+                
+                <p>We believe people improve as writers when they learn to revise more strategically, more holistically, and more often. The purpose of this website is to draw writers attention to this most important part of the writing process. Our tool highlights large and small changes, and invites writers to reflect upon the nature, scope, goal, and impact of these changes. The goal is to help writers improve by revising more strategically, more holistically, and more often.</p>
+                
+                <p>The "Mercer Street" tab offers a glimpse of the stages of revision that produced some exceptional essays by NYU undergraduates.</p>
+                
+                <h3>A research-backed approach</h3>
+                <p>In 1980, Harvard researcher Nancy Sommers published a landmark study comparing the revision habits of novice and expert writers. Her findings revealed several fundamentally different approaches to and understandings of revision:</p>
+                
+                <p><strong>For novice writers,</strong> revising involves mostly small changes, like word substitutions or addressing mechanical and grammatical errors. This minimalist approach to revision reflects novice's beliefs about the very purpose of writing. For most novices, writing is primarily a tool for expression--to "get down" our ideas on the page. This understanding of writing requires little use of revision.</p>
+                
+                <p><strong>For experts,</strong> revision means much more. It can mean adding, deleting, or rewriting entire paragraphs. It can mean introducing new evidence and considering alternative perspectives. It can mean reinforcing, challenging or transforming one's initial assumptions and beliefs. This maximalist approach to revision reflects a profoundly different theory about the purpose of writing. For experts, writing isn't only a tool for expression but also exploration and discovery. They turn to writing to generate and better understand new ideas, and this demands revision, literally re-envisioning your ideas.</p>
+                
+                <h3>How This Tool Helps</h3>
+                <p>By examining the nature and scope of revisions, writers can identify current revision habits and patterns, identify opportunities for more substantial revision, and begin utilizing writing not merely to express ideas you already have, but also to expand, refine, challenge, and develop your thinking as well.</p>
+            </div>
         </div>
     </div>
-</div>
 
     <script>
         // Global variables
@@ -1093,270 +1111,76 @@
             }
         }
         
-   // 1. The main improved diff function
-   function generateAdvancedDiff(text1, text2) {
+        function generateAdvancedDiff(text1, text2) {
     const dmp = new diff_match_patch();
-    const diffs = dmp.diff_main(text1, text2);
-    dmp.diff_cleanupSemantic(diffs);
     
-    const relocations = findRelocations(text1, text2, diffs);
+    // Configure for word-level boundaries
+    dmp.Diff_Timeout = 2.0;
+    dmp.Diff_EditCost = 6;
+    
+    // Perform initial diff
+    const diffs = dmp.diff_main(text1, text2);
+    
+    // Clean up to respect word boundaries
+    dmp.diff_cleanupSemantic(diffs);
+    dmp.diff_cleanupEfficiency(diffs);
     
     let html = '';
-    let pos1 = 0;
-    let pos2 = 0;
     
     for (let i = 0; i < diffs.length; i++) {
         const [operation, text] = diffs[i];
-        
-        let currentPos1 = pos1;
-        let currentPos2 = pos2;
+        const level = determineRevisionLevel(text);
         
         if (operation === 0) { // Equal
-            html += text;
-            pos1 += text.length;
-            pos2 += text.length;
+            html += escapeHtml(text);
         } else if (operation === -1) { // Deletion
-            const isRelocated = isPartOfRelocation(currentPos1, text.length, relocations.deletions);
-            const level = determineChangeLevel(text);
-            
-            if (isRelocated) {
-                html += `<span class="deletion ${level} relocated">${text}</span>`;
-            } else {
-                html += `<span class="deletion ${level}">${text}</span>`;
-            }
-            pos1 += text.length;
+            html += `<span class="deletion ${level}-level">${escapeHtml(text)}</span>`;
         } else if (operation === 1) { // Addition
-            const isRelocated = isPartOfRelocation(currentPos2, text.length, relocations.additions);
-            const level = determineChangeLevel(text);
-            
-            if (isRelocated) {
-                html += `<span class="addition ${level} relocated">${text}</span>`;
-            } else {
-                html += `<span class="addition ${level}">${text}</span>`;
-            }
-            pos2 += text.length;
+            html += `<span class="addition ${level}-level">${escapeHtml(text)}</span>`;
         }
     }
     
     return html;
 }
 
-// New function to detect modifications
-function detectModifications(diffs) {
-    const enhanced = [];
-    
-    for (let i = 0; i < diffs.length; i++) {
-        const current = diffs[i];
-        const next = diffs[i + 1];
-        
-        // Look for deletion followed by addition (potential modification)
-        if (current[0] === -1 && next && next[0] === 1) {
-            const deletedText = current[1];
-            const addedText = next[1];
-            
-            // Calculate similarity to determine if it's a modification
-            const similarity = calculateTextSimilarity(deletedText, addedText);
-            
-            if (similarity > 0.3) { // 30% similar = modification
-                enhanced.push([current[0], current[1], true]); // Mark as modification
-                enhanced.push([next[0], next[1], true]); // Mark as modification
-                i++; // Skip the next item since we processed it
-            } else {
-                enhanced.push([current[0], current[1], false]);
-            }
-        } else {
-            enhanced.push([current[0], current[1], false]);
-        }
-    }
-    
-    return enhanced;
+
+// Helper to escape HTML
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
-// Helper function to calculate text similarity
-function calculateTextSimilarity(text1, text2) {
-    const words1 = text1.toLowerCase().split(/\s+/);
-    const words2 = text2.toLowerCase().split(/\s+/);
-    
-    const set1 = new Set(words1);
-    const set2 = new Set(words2);
-    
-    const intersection = new Set([...set1].filter(x => set2.has(x)));
-    const union = new Set([...set1, ...set2]);
-    
-    return intersection.size / union.size;
-}
 
-// 2. Helper function to determine change levels
-function determineChangeLevel(text) {
-    const wordCount = (text.match(/\b\w+\b/g) || []).length;
-    const sentenceCount = (text.match(/[.!?]+/g) || []).length;
-    const hasLineBreaks = text.includes('\n');
+// Single unified function for determining revision level
+function determineRevisionLevel(text) {
+    // Normalize the text for consistent analysis
+    const normalizedText = text.trim();
     
-    if (hasLineBreaks && sentenceCount > 1) {
-        return 'sentence-level';
-    } else if (wordCount > 5) {
-        return 'phrase-level';
-    } else if (wordCount > 1) {
-        return 'word-level';
+    // Define clear thresholds
+    const words = (normalizedText.match(/\b\w+['']?\w*\b/g) || []).length;
+    const sentences = (normalizedText.match(/[.!?]+[\s\n]+/g) || []).length;
+    const hasMultipleParagraphs = /\n\s*\n/.test(normalizedText);
+    
+    // Clear hierarchical logic - return base names without "-level"
+    if (hasMultipleParagraphs || sentences >= 3) {
+        return 'paragraph';
+    } else if (sentences >= 1 && words >= 6) {
+        return 'sentence';
+    } else if (words >= 3) {
+        return 'phrase';
+    } else if (words >= 1) {
+        return 'word';
     } else {
-        return 'char-level';
+        return 'char'; // For punctuation-only changes
     }
 }
 
 
-function splitIntoSentences(text) {
-    return text.match(/[^.!?]+[.!?]+/g) || [text];
-}
-
-function generateWordLevelDiff(oldSentence, newSentence) {
-    const words1 = oldSentence.split(/\s+/);
-    const words2 = newSentence.split(/\s+/);
-    
-    const wordChanges = computeLCS(words1, words2);
-    let result = '';
-    
-    for (let change of wordChanges) {
-        if (change.type === 'equal') {
-            result += change.value + ' ';
-        } else if (change.type === 'delete') {
-            result += `<span class="deletion word-level">${change.value}</span> `;
-        } else if (change.type === 'insert') {
-            result += `<span class="addition word-level">${change.value}</span> `;
-        } else if (change.type === 'replace') {
-            // For replaced words, do character-level comparison
-            const charDiff = generateCharacterLevelDiff(change.oldValue, change.newValue);
-            result += charDiff + ' ';
-        }
-    }
-    
-    return `<span class="modification sentence-level">${result.trim()}</span>`;
-}
-
-function generateCharacterLevelDiff(oldWord, newWord) {
-    // Simple character-level diff for individual words
-    if (oldWord === newWord) return oldWord;
-    
-    // Check if it's a simple addition/deletion
-    if (oldWord.includes(newWord)) {
-        return `<span class="modification word-level">${newWord}</span>`;
-    } else if (newWord.includes(oldWord)) {
-        return `<span class="modification word-level">${newWord}</span>`;
-    }
-    
-    // For complex changes, show as modification
-    return `<span class="deletion char-level">${oldWord}</span><span class="addition char-level">${newWord}</span>`;
-}
 
 
 
-// Enhanced phrase-level detection
-function detectPhraseChanges(text1, text2) {
-    // Split into phrases (groups of 2-5 words)
-    const phrases1 = extractPhrases(text1);
-    const phrases2 = extractPhrases(text2);
-    
-    const phraseChanges = computeLCS(phrases1, phrases2);
-    let result = '';
-    
-    for (let change of phraseChanges) {
-        if (change.type === 'equal') {
-            result += change.value + ' ';
-        } else if (change.type === 'delete') {
-            result += `<span class="deletion phrase-level">${change.value}</span> `;
-        } else if (change.type === 'insert') {
-            result += `<span class="addition phrase-level">${change.value}</span> `;
-        } else if (change.type === 'replace') {
-            result += `<span class="deletion phrase-level">${change.oldValue}</span><span class="addition phrase-level">${change.newValue}</span> `;
-        }
-    }
-    
-    return result.trim();
-}
 
-function extractPhrases(text) {
-    const words = text.split(/\s+/);
-    const phrases = [];
-    
-    // Create overlapping phrases of 2-4 words
-    for (let i = 0; i < words.length; i += 2) {
-        const phrase = words.slice(i, Math.min(i + 3, words.length)).join(' ');
-        if (phrase.trim()) phrases.push(phrase);
-    }
-    
-    return phrases;
-}
-
-
-// 3. The missing findRelocations function
-function findRelocations(text1, text2, diffs) {
-    // Extract meaningful chunks (sentences or significant phrases)
-    const chunks1 = extractMeaningfulChunks(text1);
-    const chunks2 = extractMeaningfulChunks(text2);
-    
-    const relocations = { deletions: [], additions: [] };
-    
-    // Find chunks that appear in both documents but in different positions
-    for (const chunk1 of chunks1) {
-        for (const chunk2 of chunks2) {
-            if (chunk1.text.trim() === chunk2.text.trim() && chunk1.text.length > 30) {
-                // Calculate relative positions
-                const relPos1 = chunk1.position / text1.length;
-                const relPos2 = chunk2.position / text2.length;
-                
-                // If position changed significantly, mark as relocation
-                if (Math.abs(relPos1 - relPos2) > 0.1) {
-                    relocations.deletions.push({
-                        position: chunk1.position,
-                        length: chunk1.text.length
-                    });
-                    relocations.additions.push({
-                        position: chunk2.position,
-                        length: chunk2.text.length
-                    });
-                }
-            }
-        }
-    }
-    
-    return relocations;
-}
-
-
-// 4. Helper function to extract meaningful chunks
-function extractMeaningfulChunks(text) {
-    const chunks = [];
-    
-    // Extract sentences
-    const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
-    let position = 0;
-    
-    for (const sentence of sentences) {
-        const start = text.indexOf(sentence, position);
-        if (start !== -1) {
-            chunks.push({
-                text: sentence,
-                position: start,
-                length: sentence.length
-            });
-            position = start + sentence.length;
-        }
-    }
-    
-    return chunks;
-}
-
-// 5. Helper function to check if content is part of a relocation
-function isPartOfRelocation(position, length, relocations) {
-    const end = position + length;
-    for (const reloc of relocations) {
-        const relocEnd = reloc.position + reloc.length;
-        // Check for overlap
-        if (!(position >= relocEnd || end <= reloc.position)) {
-            return true;
-        }
-    }
-    return false;
-}
 
 
         // Function to format text with proper paragraph breaks
@@ -1701,10 +1525,9 @@ For technology designers, these questions carry greater weight. Designers must r
                     const diffContent = generateAdvancedDiff(formattedText1, formattedText2);
                     diffPanel.innerHTML = `
                         <h3>Changes: ${essay.drafts[i].version} → ${essay.drafts[i + 1].version}</h3>
-                        <div class="diff-legend">
+                       <div class="diff-legend">
                             <span class="legend-item"><span class="deletion word-level">Deleted</span></span>
                             <span class="legend-item"><span class="addition word-level">Added</span></span>
-                            <span class="legend-item"><span class="addition relocated">Relocated</span></span>
                         </div>
                         <div class="panel-content">${diffContent}</div>
                     `;
@@ -2019,19 +1842,16 @@ For technology designers, these questions carry greater weight. Designers must r
         });
 
         // Data structure to store revision analysis
-let revisionAnalysis = {
-    additions: { word: [], phrase: [], sentence: [], paragraph: [] },
-    deletions: { word: [], phrase: [], sentence: [], paragraph: [] },
-    relocations: { word: [], phrase: [], sentence: [], paragraph: [] }
-};
+        let revisionAnalysis = {
+            additions: { word: [], phrase: [], sentence: [], paragraph: [] },
+            deletions: { word: [], phrase: [], sentence: [], paragraph: [] }
+        };
 
-// Function to analyze revisions from diff content
 function analyzeRevisions(diffHtml) {
     // Reset analysis
     revisionAnalysis = {
         additions: { word: [], phrase: [], sentence: [], paragraph: [] },
-        deletions: { word: [], phrase: [], sentence: [], paragraph: [] },
-        relocations: { word: [], phrase: [], sentence: [], paragraph: [] }
+        deletions: { word: [], phrase: [], sentence: [], paragraph: [] }
     };
     
     // Parse the diff HTML
@@ -2045,60 +1865,23 @@ function analyzeRevisions(diffHtml) {
     // Analyze additions
     additions.forEach(span => {
         const text = span.textContent;
-        const level = detectRevisionLevel(text);
-        const isRelocated = span.classList.contains('relocated');
-        
-        if (isRelocated) {
-            revisionAnalysis.relocations[level].push(text);
-        } else {
-            revisionAnalysis.additions[level].push(text);
-        }
+        const level = determineRevisionLevel(text);
+        revisionAnalysis.additions[level].push(text);
     });
     
     // Analyze deletions
     deletions.forEach(span => {
         const text = span.textContent;
-        const level = detectRevisionLevel(text);
-        const isRelocated = span.classList.contains('relocated');
-        
-        if (isRelocated && !revisionAnalysis.relocations[level].includes(text)) {
-            // Only add if not already in relocations (avoid duplicates)
-            revisionAnalysis.relocations[level].push(text);
-        } else if (!isRelocated) {
-            revisionAnalysis.deletions[level].push(text);
-        }
+        const level = determineRevisionLevel(text);
+        revisionAnalysis.deletions[level].push(text);
     });
     
     return revisionAnalysis;
 }
 
-// Enhanced function to detect revision level
-function detectRevisionLevel(text) {
-    const wordCount = (text.match(/\b\w+\b/g) || []).length;
-    const sentenceCount = (text.match(/[.!?]+/g) || []).length;
-    const hasMultipleLineBreaks = (text.match(/\n\n/g) || []).length > 0;
-    
-    // Paragraph level: multiple line breaks or multiple complete sentences
-    if (hasMultipleLineBreaks || sentenceCount > 2) {
-        return 'paragraph';
-    }
-    // Sentence level: contains sentence-ending punctuation
-    else if (sentenceCount >= 1 && wordCount > 5) {
-        return 'sentence';
-    }
-    // Phrase level: multiple words but not a complete sentence
-    else if (wordCount > 2) {
-        return 'phrase';
-    }
-    // Word level: 1-2 words
-    else {
-        return 'word';
-    }
-}
-
 // Function to generate table view
 function generateTableView(analysis) {
-    const types = ['additions', 'deletions', 'relocations'];
+    const types = ['additions', 'deletions'];
     const levels = ['word', 'phrase', 'sentence', 'paragraph'];
     
     let html = `
@@ -2115,10 +1898,6 @@ function generateTableView(analysis) {
                 <div class="stat-number">${getTotalByType(analysis, 'deletions')}</div>
                 <div class="stat-label">Deletions</div>
             </div>
-            <div class="stat-card">
-                <div class="stat-number">${getTotalByType(analysis, 'relocations')}</div>
-                <div class="stat-label">Relocations</div>
-            </div>
         </div>
         
         <table class="revision-table">
@@ -2127,7 +1906,6 @@ function generateTableView(analysis) {
                     <th>Revision Level</th>
                     <th>Additions</th>
                     <th>Deletions</th>
-                    <th>Relocations</th>
                     <th>Total</th>
                 </tr>
             </thead>
@@ -2171,7 +1949,6 @@ function generateDetailedView(analysis) {
     const types = [
         { key: 'additions', label: 'Additions', class: 'addition' },
         { key: 'deletions', label: 'Deletions', class: 'deletion' },
-        { key: 'relocations', label: 'Relocations', class: 'relocation' }
     ];
     
     const levels = ['word', 'phrase', 'sentence', 'paragraph'];
@@ -2297,6 +2074,23 @@ function generateRevisionReport() {
 
 // Add event listeners when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize modal functionality
+    const revisionReportModal = document.getElementById('revisionReportModal');
+    const reportModalClose = document.getElementById('reportModalClose');
+    
+    if (reportModalClose) {
+        reportModalClose.onclick = function() {
+            revisionReportModal.style.display = 'none';
+        }
+    }
+    
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        if (event.target === revisionReportModal) {
+            revisionReportModal.style.display = 'none';
+        }
+    }
+    
     // Add generate report button to the diff panels
     const addReportButton = () => {
         const comparisonResults = document.getElementById('comparisonResults');
