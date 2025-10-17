@@ -15,13 +15,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: sticky;
+    position: relative;
     top: 0;
     z-index: 100;
 }
 
 .header-title {
     flex-grow: 1;
+    min-width: 0;
     text-align: center;
 }
 
@@ -1509,6 +1510,71 @@
     background: #d0d0d0;
 }
 
+/* Fizzle animations */
+@keyframes fizzleOut {
+  0% { opacity: 1; filter: blur(0px); }
+  50% { opacity: 0.3; filter: blur(2px); }
+  100% { opacity: 0; filter: blur(6px); }
+}
+
+@keyframes fizzleIn {
+  0% { opacity: 0; filter: blur(6px); }
+  50% { opacity: 0.5; filter: blur(2px); }
+  100% { opacity: 1; filter: blur(0px); }
+}
+
+/* Centered, fixed-width quote area that won't stretch header */
+.header-title.quote-mode {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 50%;
+  transform: translate(-50%, -50%); /* vertically center inside header */
+  width: 420px;          /* FIXED max pixel width — change this if you want narrower/wider */
+  max-width: 420px;
+  padding: 0 12px;       /* breathing room for longer lines */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;  /* prevents overlapping clicks to header buttons/logo */
+  z-index: 20;           /* keep it above header background but below controls if needed */
+}
+
+.header-title.quote-mode h1 {
+  font-size: 0.95rem;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.4;
+  margin: 0;
+  background: none !important;
+  -webkit-text-fill-color: initial !important;
+  color: var(--primary-dark) !important;
+  word-break: break-word;
+  pointer-events: none;
+}
+
+
+.header-title.quote-mode .quote-author {
+  font-size: 0.85rem;
+  font-style: normal;
+  font-weight: 600;
+  color: var(--accent-light);
+  margin-top: 6px;
+  pointer-events: none;
+}
+
+/* Optional: make fizzle stronger for visibility in smaller text */
+.fizzle-out {
+  animation: fizzleOut 0.9s forwards ease-in;
+}
+.fizzle-in {
+  animation: fizzleIn 0.9s forwards ease-out;
+}
+
+
+
     </style>
 </head>
 
@@ -1715,6 +1781,76 @@
                 errorMessage.style.display = 'block';
             }
         }
+
+
+
+       const quotes = [
+    { text: "By the time I am nearing the end of a story, the first part will have been reread and altered and corrected at least one hundred and fifty times. I am suspicious of both facility and speed. Good writing is essentially rewriting.", author: "Roald Dahl" },
+    { text: "I'm a rewriter. That's the part I like best...once I have a pile of paper to work with, it's like having the pieces of a puzzle. I just have to put the pieces together to make a picture.", author: "Judy Blume" },
+    { text: "The beautiful part of writing is that you don't have to get it right the first time, unlike, say, a brain surgeon.", author: "Robert Cormier" },
+    { text: "Books aren't written—they're rewritten. Including your own.", author: "Michael Crichton" },
+    { text: "Half my life is an act of revision.", author: "John Irving" },
+    { text: "It is no sign of weakness or defeat that your manuscript ends up in need of major surgery. This is common in all writing and among the best of writers.", author: "E.B. White" },
+    { text: "Writing is rewriting. A writer must learn to deepen characters, trim writing, intensify scenes.", author: "Richard North Patterson" },
+    { text: "I have rewritten—often several times—every word I have ever written. My pencils outlast their erasers.", author: "Vladimir Nabokov" },
+    { text: "I'm not a very good writer, but I'm an excellent rewriter.", author: "James Michener" },
+    { text: "The best advice I can give is to put it away until you can read it with new eyes.", author: "Neil Gaiman" },
+    { text: "Revision is one of the exquisite pleasures of writing.", author: "Bernard Malamud" },
+    { text: "The writer’s life is a life of revisions.", author: "Jonathan Franzen" },
+    { text: "The novel really happens in the revisions.", author: "Tama Janowitz" },
+    { text: "I love revisions...We can't go back and revise our lives, but revising what we have written comes closest.", author: "Katherine Paterson" },
+    { text: "Writing and rewriting are a constant search for what it is one is saying.", author: "John Updike" },
+    { text: "Reread, rewrite, reread, rewrite. If it still doesn’t work, throw it away.", author: "Helen Dunmore" },
+    { text: "I edit as I write. I revise endlessly. I don't go forward until I know that what I've written is as good as I can make it.", author: "Anita Shreve" }
+];
+
+const titleContainer = document.querySelector('.header-title');
+const titleEl = titleContainer.querySelector('h1');
+const originalTitle = titleEl.innerHTML;
+
+let currentQuote = 0;
+let showingTitle = true;
+
+/**
+ * Handles the fade-out/fade-in transition between title and quotes.
+ */
+function cycleDisplay() {
+  // Trigger fizzle-out animation
+  titleEl.classList.remove('fizzle-in');
+  void titleEl.offsetWidth; // force reflow
+  titleEl.classList.add('fizzle-out');
+
+  setTimeout(() => {
+    titleEl.classList.remove('fizzle-out');
+
+    if (showingTitle) {
+      // Show quote
+      const quote = quotes[currentQuote];
+      titleContainer.classList.add('quote-mode');
+      titleEl.innerHTML = `
+        ${quote.text}
+        <span class="quote-author">— ${quote.author}</span>
+      `;
+      currentQuote = (currentQuote + 1) % quotes.length;
+      showingTitle = false;
+    } else {
+      // Show main title again
+      titleContainer.classList.remove('quote-mode');
+      titleEl.innerHTML = originalTitle;
+      showingTitle = true;
+    }
+
+    // Trigger fizzle-in
+    void titleEl.offsetWidth;
+    titleEl.classList.add('fizzle-in');
+  }, 1200);
+}
+
+// Start after 10s delay, then alternate every 30s
+setTimeout(() => {
+  cycleDisplay();
+  setInterval(cycleDisplay, 30000);
+}, 10000);
         
 // Add this function anywhere in your script section (before generateAdvancedDiff is called)
 function determineRevisionLevel(text) {
