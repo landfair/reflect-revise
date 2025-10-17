@@ -1574,6 +1574,13 @@
                         <p class="example-description">An ethnographic study exploring smartphone use - view progression through five drafts</p>
                         <button class="example-btn">View All Drafts</button>
                     </div>
+
+                    <div class="example-card" data-essay="essay2">
+                        <h4>Simulated Systems and the Limits of Intuitive Learning</h4>
+                        <p class="example-author">By Srinivas Harish</p>
+                        <p class="example-description">Examining how simulations shape our understanding of complex systems</p>
+                        <button class="example-btn">View All Drafts</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1707,6 +1714,31 @@
             }
         }
         
+// Add this function anywhere in your script section (before generateAdvancedDiff is called)
+function determineRevisionLevel(text) {
+    // Normalize the text for consistent analysis
+    const normalizedText = text.trim();
+    
+    // Define clear thresholds
+    const words = (normalizedText.match(/\b\w+['']?\w*\b/g) || []).length;
+    const sentences = (normalizedText.match(/[.!?]+[\s\n]+/g) || []).length;
+    const hasMultipleParagraphs = /\n\s*\n/.test(normalizedText);
+    
+    // Clear hierarchical logic
+    if (hasMultipleParagraphs || sentences >= 3) {
+        return 'paragraph';
+    } else if (sentences >= 1 && words >= 6) {
+        return 'sentence';
+    } else if (words >= 3) {
+        return 'phrase';
+    } else if (words >= 1) {
+        return 'word';
+    } else {
+        return 'char'; // For punctuation-only changes
+    }
+}
+
+
         function generateAdvancedDiff(text1, text2) {
     const dmp = new diff_match_patch();
     
@@ -1748,29 +1780,6 @@ function escapeHtml(text) {
 }
 
 
-// Single unified function for determining revision level
-function determineRevisionLevel(text) {
-    // Normalize the text for consistent analysis
-    const normalizedText = text.trim();
-    
-    // Define clear thresholds
-    const words = (normalizedText.match(/\b\w+['']?\w*\b/g) || []).length;
-    const sentences = (normalizedText.match(/[.!?]+[\s\n]+/g) || []).length;
-    const hasMultipleParagraphs = /\n\s*\n/.test(normalizedText);
-    
-    // Clear hierarchical logic - return base names without "-level"
-    if (hasMultipleParagraphs || sentences >= 3) {
-        return 'paragraph';
-    } else if (sentences >= 1 && words >= 6) {
-        return 'sentence';
-    } else if (words >= 3) {
-        return 'phrase';
-    } else if (words >= 1) {
-        return 'word';
-    } else {
-        return 'char'; // For punctuation-only changes
-    }
-}
 
 
 
@@ -1779,15 +1788,20 @@ function determineRevisionLevel(text) {
 
 
 
-        // Function to format text with proper paragraph breaks
+
+// Replace the existing formatText function with this:
         function formatText(text) {
-            // Split into sentences and group them into paragraphs
+            // If the text already has paragraph breaks (double newlines), preserve them
+            if (text.includes('\n\n')) {
+                return text; // Return as-is, the paragraph structure is already there
+            }
+            
+            // Otherwise, fallback to the old behavior for backward compatibility
             const sentences = text.match(/[^\.!?]+[\.!?]+/g) || [text];
             let formattedText = '';
             
             for (let i = 0; i < sentences.length; i++) {
                 formattedText += sentences[i].trim();
-                // Add paragraph break every 2-3 sentences for better readability
                 if ((i + 1) % 3 === 0 && i < sentences.length - 1) {
                     formattedText += '\n\n';
                 } else if (i < sentences.length - 1) {
@@ -2099,8 +2113,48 @@ For those of us who find ourselves tethered to our devices on daily commutes, th
 For technology designers, these questions carry greater weight. Designers must recognize that our creations don't simply serve stated functions, but also actively reshape social norms and human behavior, bearing significant ethical responsibility. Designers must not simply seek to avoid harm but to actively consider the social and psychological conditions being created, asking questions before widespread adoption rather than discovering problematic effects afterward. Winner is clear about this obligation, writing: "Much more than we have acknowledged in the past, we must admit our responsibility for what we are making" (Winner 59). Importantly, Winner is speaking to society as a whole, as our own interactions with technology also fuel these changes. At the end of the day, we all bear some responsibility for examining how new technologies impact our collective lives. As we move forward with technological innovation, acknowledging these tensions might help create tools that better align with genuine human needs rather than inadvertently amplifying our social anxieties.`
 }
                 ]
-            }
-        };
+            },
+
+
+          essay2: {
+    title: "Simulated Systems and the Limits of Intuitive Learning",
+    author: "Srinivas Harish",
+    description: "Examining how simulations shape our understanding of complex systems",
+    drafts: [
+        { 
+            version: "Draft 1", 
+            text: `However, this reduction in extraneous load comes at a cost. Sweller posits that while managing extraneous load is essential, there is a risk of oversimplification. By reducing unnecessary cognitive strain, KSP may strip away the intrinsic complexity of space travel and compromise germane cognitive load. As such, the simplified interface could reduce deep learning and schema development (Sweller, 2011) by reducing the opportunities for the mental struggle necessary for true scientific understanding. The player does not have to calculate rocket trajectories or orbital mechanics manually and the game alone might not help in developing robust mental schemas needed for independent problem-solving, which involves expending mental effort in reorganizing and internalizing information. This also ties into Sweller's expertise reversal effect, where techniques that help novices may become counterproductive as learners gain more experience. As players grow more proficient at KSP, they may begin to rely too heavily on the game's interface and structure, potentially hindering their ability to tackle real-world, unstructured problems. Perhaps then, this suggests that instructional techniques that were once helpful can become detrimental. For novices, KSP's structured guidance is invaluable, but for experts, the same guidance may become redundant in more complex learning.
+
+Interestingly, however, while KSP's interface facilitates initial learning, it also sparked my curiosity to dive deeper into the science behind space exploration. This led me to calculate interplanetary Hohmann transfer trajectories manually and write a paper on the topic. The game acted as an inspiration, providing a stepping stone from simple, guided experimentation to more advanced, independent scientific inquiry. This suggests that while KSP reduces the cognitive load in the early stages, it can also catalyze deeper learning, where the player can tackle more complex, real-world calculations outside the game's simplified and structured framework.
+
+While this structured environment of KSP is ideal for teaching fundamental principles, it starkly contrasts with the unpredictability and risk inherent to real-world scientific exploration and discovery. A pre-configured structure lacks the messiness that Ann-Sophie Barwich identifies as crucial for scientific discovery in her essay, "The Value of Failure in Science" Barwich argues that failure is not merely an impediment but a driving force for progress, stating, "Science fails... at a high rate and with regularity, [it is not] successful despite such prevalent failures... it is successful because of them." (Barwich, 2019) Barwich values cognitive load and failure as mechanisms for discovery, while Sweller would argue that too much cognitive load can hinder learning. This perspective highlights a key limitation of KSP: its deterministic framework undermines the role of serendipity, anomalies, and long-term consequences in fostering paradigm shifts. Barwich's analysis of the flawed grandmother cell theory illustrates the value of such chaos—errors and unanticipated results often provoke questions and reshape understanding. In real-world science, serendipity and ambiguity often force researchers to explore paths they hadn't anticipated. For example, the discovery of penicillin resulted from a serendipitous failure (Ban, 2006), and the theory of cosmic microwave background radiation emerged from unintentional noise in radio antenna data (Oliver, 2020). These paradigm shifts represent the very essence of revolutionary science and were an accidental result of unpredictable failure.
+
+These discoveries show that considering the type of failure matters as much as the failure itself--catastrophic failures often halt progress entirely, while inspirational failures provoke further questions, and serendipitous failures lead to unexpected breakthroughs. Thomas Edison's thousands (Goodman, 2013) of unsuccessful attempts at designing a light bulb built resilience, and ethical implications underscore the fact that science does not exist in a vacuum: catastrophic failures can lead to societal harm, environmental destruction, or controversial technological applications, as seen with disasters like the Challenger (NASA, 2024) explosion. Yet, in KSP, progress is neatly packaged into a closed-loop feedback system where players rebuild and retry within the bounds of predetermined solutions, where failure is not just acceptable, but entertaining. As such, no deeper questioning of assumptions is required as no anomalies would ever force a reconsideration of the game's underlying logic. Thus, the absence of epistemological upheaval renders the game a simplified approximation of scientific progress, devoid of the intellectual chaos and cognitive complexity that fuels genuine breakthroughs. Barwich might contend this is an exercise in following rules encouraging fixed patterns of thought rather than exploring the unknown with adaptive expertise, a limitation that Sweller's CLT overlooks in its quest for simplified learning. Sweller, however, would likely respond that the struggle inherent to Barwich's model, while beneficial for true discovery, could overwhelm learners at a foundational level, pushing them toward frustration rather than motivation. Barwich implicitly suggests that the cognitive strain imposed by failure—what might be classified as intrinsic or even germane load—plays a critical role in cultivating higher-order thinking and epistemic innovation. However, KSP and similar simulations cannot fully replicate the raw epistemology of science, as they remain confined within pre-defined structures, incapable of capturing the unpredictable and ethically complex nature of genuine scientific discovery.`
+        },
+        { 
+            version: "Draft 2", 
+            text: `However, this reduction in extraneous load comes at a cost. Sweller emphasizes that instructional design must "reduce extraneous cognitive load without altering [its] intrinsic nature" (Sweller, 2011). In KSP, there is a risk of oversimplification. By removing the need to calculate trajectories or manipulate equations, it strips some of the inherent complexity of space travel. This could compromise germane load by limiting the mental struggle needed to build deep, transferable schemas necessary for scientific discovery. This also ties into Sweller's "expertise reversal effect" (Sweller, 2011), where techniques that help novices may become counterproductive as learners gain more experience. As players grow more proficient at KSP, they may begin to rely too heavily on the simulation's interface and structure, potentially hindering their ability to tackle real-world, unstructured problems. Perhaps then, this suggests that instructional techniques that were once helpful can become detrimental. For novices, KSP's structured guidance is invaluable, but for experts, the same guidance may become a hindrance to more complex learning.
+
+But even beyond the risks of over-structuring, there's a deeper complication: what KSP defines as "failure" isn't failure in a practical sense. It's intuitive failure that's bounded and easily corrected—more of a design loop than an epistemic disruption. This stands in contrast to the messy, high-stakes failure that drives scientific discovery, as German cognitive scientist Ann-Sophie Barwich argues in her essay, "The Value of Failure in Science." Barwich says failure is not merely an impediment but a driving force for progress, stating, "Science fails... at a high rate and with regularity, [it is not] successful despite such prevalent failures... it is successful because of them" (Barwich, 2019). If we take failure as a mechanism that increases cognitive load, then Sweller's warning that excessive cognitive strain can overwhelm learners and hinder schema formation stands in tension with Barwich's view that failure, and thus the cognitive strain from it, is epistemically generative.
+
+However, Barwich's epistemic view of failure highlights a key limitation of KSP: its deterministic framework undermines the role of serendipity, anomalies, and long-term consequences in fostering paradigm shifts. In her critique of the grandmother cell theory, Barwich shows how scientific progress emerged only after anomalies forced a rejection of this overly simplistic view. The collapse of the theory led to a deeper understanding of distributed neural processing, illustrating how failure can provoke conceptual change rather than just iterative refinement. In real-world science, serendipity and ambiguity often force researchers to explore paths they hadn't anticipated. For example, the discovery of penicillin resulted from a serendipitous failure (Ban, 2006), and the theory of cosmic microwave background radiation emerged from unintentional noise in radio antenna data (Oliver, 2020). These paradigm shifts represent the very essence of revolutionary science and were an accidental result of unpredictable failure. Some failures, I'd argue, are more epistemically productive than others: catastrophic failures may halt progress entirely, while inspirational failures provoke new questions, and serendipitous failures yield unanticipated breakthroughs. Edison's thousands (Goodman, 2013) of unsuccessful attempts at designing a light bulb built resilience, and ethical implications underscore the fact that science does not exist in a vacuum: catastrophic failures can lead to societal harm, environmental destruction, or controversial technological applications, as seen with disasters like the Challenger (NASA, 2024) explosion.
+
+Yet such epistemically rich failures require conditions that KSP does not provide. In KSP, failure is intuitive, recoverable, and ultimately entertaining—a design feature rather than a disruption. Progress is neatly packaged into a closed-loop feedback system where players rebuild and retry within the bounds of predetermined solutions. As such, no deeper questioning of assumptions is required, since no anomalies ever force a reconsideration of the game's underlying logic. The absence of epistemological upheaval renders KSP a simplified approximation of scientific progress, one devoid of the intellectual chaos, conceptual instability, and open-ended failure that often fuels scientific discovery. Barwich emphasizes that failure is not merely a pedagogical inconvenience but a necessary condition for challenging and refining scientific frameworks as they lead to "active engagement with the limits of understanding" (Barwich, 2019). This perspective helps illuminate the limits of KSP as a learning tool: while the simulation enables iterative trial and error, it does so within a stable, rule-bound environment. There are no paradigm-breaking anomalies, only errors that can be corrected by better optimization within a closed system. As such, the type of failure KSP enables does not compel players to rethink assumptions or confront epistemological uncertainty. Barwich's insight casts KSP as an exercise in following rules rather than exploring the unknown, and reveals how its structured feedback system encourages fixed patterns of thought rather than adaptive expertise. From a Swellerian perspective, this would be seen as a feature, not a flaw—one that reduces extraneous load and supports efficient schema formation. However, Barwich's framework reveals that this very efficiency might come at the cost of scientific creativity.`
+        },
+        { 
+            version: "Final Draft", 
+            text: `KSP's oversimplification may also come at a cost to STEM students later in their careers. In his essay, Sweller introduced the "expertise-reversal effect," which occurs when learning scaffolds that support novices start to hinder more advanced learners as those scaffolds themselves become an extra load (Sweller 131). In KSP, every maneuver node, thrust readout, and on-screen trajectory cue serves as that kind of scaffold. The longer a player uses those aids, the more the aids become baked into the problem-solving routine, resulting in a kind of cognitive overadjustment to the simulation. When the real world no longer shows a blue maneuver node or a perfect delta-v readout, what began for the player as a learning aid can become a surprisingly hard-to-escape cage. The player receives inputs, updates internal schemas through feedback, and iteratively builds a model of the world. Over time, the game's interface and cues act like learned priors, scaffolding intuitive responses that feel like mastery, but may not generalize beyond the simulation. In that sense, what KSP cultivates is not so much deep understanding, but a self-model conditioned on success within a closed system. A constrained self-model—a learner's internal representation of what they can do and how the system works—becomes brittle: optimized for success within a closed loop, but unprepared for the noise of real-world science.
+
+Yet oversimplification is only half the problem. As a simulation, KSP teaches you to succeed in its rule space but not necessarily to question the assumptions that world is built on. In KSP, failure is a bounded design loop, but true scientific progress often stems from failures that break the framework itself. In her essay "The Value of Failure in Science," cognitive scientist Ann-Sophie Barwich introduces and analyzes case studies in which scientists' failures led to deeper learning, including the discarded grandmother-cell theory. This theory proposed that single neurons could encode specific complex concepts, including recognizing one's grandmother. The theory gained traction before evidence was found suggesting that complex concepts are distributed across neural networks, leading researchers to adopt a new, distributed model of neural representation (Barwich 3). Barwich writes, "Science fails. It seems to fail at a high rate and with regularity. . . . One may wonder why science is so successful despite such prevalent failures. The alternative is to suggest that it is successful because of them" (Barwich 1).
+
+Barwich's arguments about failure being integral to scientific discovery align with another core feature of scientific research: the importance of uncertainty and happy accidents. Paradigm-level disruption often begins with an unexpected result. Penicillin emerged when Alexander Fleming noticed that a mold contaminating his Petri dishes killed nearby bacteria, and what looked like ruined cultures revealed an antibiotic (Ban 337-338). The detection of the cosmic microwave background followed a similar pattern: Arno Penzias and Robert Wilson tried to eliminate a persistent background hiss in their radio antenna, only to discover the remnant radiation of the Big Bang (Oliver). Neither event was an error to be 'fixed.' Each anomaly called the prevailing explanatory framework into question and compelled scientists to build a deeper one—or a new framework altogether.
+
+Barwich's view of failure as a kind of "epistemic" disturbance—what she calls "active engagement with the limits of understanding" (Barwich 2)—is precisely what a deterministic simulation like KSP cannot supply. In KSP, failure is intuitive, recoverable, and ultimately entertaining—a design feature rather than a disruption. Progress is neatly packaged into a closed-loop feedback system where players rebuild and retry within the bounds of predetermined solutions. There are no paradigm-breaking anomalies that force a reconsideration of the game's underlying logic, only errors that can be corrected by better optimization within a closed system. As such, the type of failure KSP enables does not compel players to rethink assumptions or confront epistemological uncertainty. Barwich's insight casts KSP as an exercise in following rules rather than exploring the unknown, and reveals how its structured feedback system encourages fixed patterns of thought rather than adaptive expertise. From a Swellerian perspective, KSP's avoidance of real failure might be seen as a pedagogical strength at an early stage of learning by removing epistemic friction and reducing extraneous load and making a difficult subject more approachable. But Barwich's view reframes this very efficiency as a limitation. By insulating players from paradigm-level disruptions, KSP risks flattening the intrinsic complexity of spaceflight into something that feels merely iterative. Without anomalies that violate the rules, learners practice refinement within a fixed system—but never confront the kind of disorientation that sparks new frameworks and deeper insight.`
+        }
+    ]
+}
+};
+       
         
         function createPanels(essay) {
             const slider = document.getElementById('comparisonSlider');
@@ -2590,37 +2644,11 @@ observer.observe(document.getElementById('comparisonResults'), {
             deletions: { word: [], phrase: [], sentence: [], paragraph: [] }
         };
 
-function analyzeRevisions(diffHtml) {
-    // Reset analysis
-    revisionAnalysis = {
-        additions: { word: [], phrase: [], sentence: [], paragraph: [] },
-        deletions: { word: [], phrase: [], sentence: [], paragraph: [] }
-    };
-    
-    // Parse the diff HTML
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = diffHtml;
-    
-    // Find all revision spans
-    const additions = tempDiv.querySelectorAll('.addition');
-    const deletions = tempDiv.querySelectorAll('.deletion');
-    
-    // Analyze additions
-    additions.forEach(span => {
-        const text = span.textContent;
-        const level = determineRevisionLevel(text);
-        revisionAnalysis.additions[level].push(text);
-    });
-    
-    // Analyze deletions
-    deletions.forEach(span => {
-        const text = span.textContent;
-        const level = determineRevisionLevel(text);
-        revisionAnalysis.deletions[level].push(text);
-    });
-    
-    return revisionAnalysis;
-}
+
+
+
+
+
 // Enhanced Data Persistence System
 let annotations = {};
 let savedState = null;
@@ -3339,109 +3367,6 @@ function getPanelInfo() {
     return panelInfo;
 }
 
-// Function to generate table view
-function generateTableView(analysis) {
-    const types = ['additions', 'deletions'];
-    const levels = ['word', 'phrase', 'sentence', 'paragraph'];
-    
-    let html = `
-        <div class="stats-summary">
-            <div class="stat-card">
-                <div class="stat-number">${getTotalRevisions(analysis)}</div>
-                <div class="stat-label">Total Revisions</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">${getTotalByType(analysis, 'additions')}</div>
-                <div class="stat-label">Additions</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number">${getTotalByType(analysis, 'deletions')}</div>
-                <div class="stat-label">Deletions</div>
-            </div>
-        </div>
-        
-        <table class="revision-table">
-            <thead>
-                <tr>
-                    <th>Revision Level</th>
-                    <th>Additions</th>
-                    <th>Deletions</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
-    
-    levels.forEach(level => {
-        const levelLabel = level.charAt(0).toUpperCase() + level.slice(1);
-        let rowTotal = 0;
-        let row = `<tr><td class="row-label">${levelLabel}</td>`;
-        
-        types.forEach(type => {
-            const count = analysis[type][level].length;
-            rowTotal += count;
-            row += `<td>${count}</td>`;
-        });
-        
-        row += `<td><strong>${rowTotal}</strong></td></tr>`;
-        html += row;
-    });
-    
-    // Add totals row
-    html += '<tr class="total-row"><td class="row-label">Total</td>';
-    types.forEach(type => {
-        html += `<td>${getTotalByType(analysis, type)}</td>`;
-    });
-    html += `<td>${getTotalRevisions(analysis)}</td></tr>`;
-    
-    html += '</tbody></table>';
-    
-    // Add interpretation
-    html += generateInterpretation(analysis);
-    
-    return html;
-}
-
-// Function to generate detailed list view
-function generateDetailedView(analysis) {
-    let html = '<div class="detail-list">';
-    
-    const types = [
-        { key: 'additions', label: 'Additions', class: 'addition' },
-        { key: 'deletions', label: 'Deletions', class: 'deletion' },
-    ];
-    
-    const levels = ['word', 'phrase', 'sentence', 'paragraph'];
-    
-    types.forEach(type => {
-        let hasContent = false;
-        let categoryHtml = `<div class="revision-category">
-            <div class="category-title">${type.label}</div>`;
-        
-        levels.forEach(level => {
-            const items = analysis[type.key][level];
-            if (items.length > 0) {
-                hasContent = true;
-                categoryHtml += `<h4>${level.charAt(0).toUpperCase() + level.slice(1)}-level (${items.length}):</h4>`;
-                items.forEach(item => {
-                    categoryHtml += `
-                        <div class="revision-item ${type.class}">
-                            <div class="revision-text">${escapeHtml(item.substring(0, 200))}${item.length > 200 ? '...' : ''}</div>
-                        </div>
-                    `;
-                });
-            }
-        });
-        
-        categoryHtml += '</div>';
-        if (hasContent) {
-            html += categoryHtml;
-        }
-    });
-    
-    html += '</div>';
-    return html;
-}
 
 // Helper function to escape HTML
 function escapeHtml(text) {
@@ -3450,64 +3375,461 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-// Helper functions for statistics
-function getTotalRevisions(analysis) {
-    let total = 0;
-    Object.keys(analysis).forEach(type => {
-        Object.keys(analysis[type]).forEach(level => {
-            total += analysis[type][level].length;
+// Replace the existing analyzeRevisions function and related code with this enhanced version
+
+// Enhanced revision analysis with better categorization
+function analyzeRevisions(diffHtml) {
+    const analysis = {
+        additions: {
+            micro: [],      // 1-2 words (punctuation, articles, minor word changes)
+            small: [],      // 3-10 words (phrases, short additions)
+            medium: [],     // 11-50 words (sentences, substantial phrases)
+            large: [],      // 51-150 words (paragraphs)
+            massive: []     // 150+ words (multiple paragraphs, major sections)
+        },
+        deletions: {
+            micro: [],
+            small: [],
+            medium: [],
+            large: [],
+            massive: []
+        },
+        statistics: {
+            totalChanges: 0,
+            totalWordsAdded: 0,
+            totalWordsDeleted: 0,
+            netWordChange: 0,
+            revisionIntensity: 0  // Percentage of text that changed
+        },
+        patterns: {
+            surfaceEdits: 0,      // Micro changes (likely copyediting)
+            substantiveEdits: 0,   // Small-medium changes
+            structuralChanges: 0,  // Large-massive changes
+            balanceScore: 0        // Ratio of additions to deletions
+        }
+    };
+    
+    // Parse the diff HTML
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = diffHtml;
+    
+    // Process additions
+    const additions = tempDiv.querySelectorAll('.addition');
+    additions.forEach(span => {
+        const text = span.textContent;
+        const category = categorizeRevision(text);
+        const wordCount = countWords(text);
+        
+        analysis.additions[category].push({
+            text: text,
+            wordCount: wordCount,
+            charCount: text.length
         });
+        analysis.statistics.totalWordsAdded += wordCount;
     });
-    return total;
-}
-
-function getTotalByType(analysis, type) {
-    let total = 0;
-    Object.keys(analysis[type]).forEach(level => {
-        total += analysis[type][level].length;
+    
+    // Process deletions
+    const deletions = tempDiv.querySelectorAll('.deletion');
+    deletions.forEach(span => {
+        const text = span.textContent;
+        const category = categorizeRevision(text);
+        const wordCount = countWords(text);
+        
+        analysis.deletions[category].push({
+            text: text,
+            wordCount: wordCount,
+            charCount: text.length
+        });
+        analysis.statistics.totalWordsDeleted += wordCount;
     });
-    return total;
-}
-
-function getTotalByLevel(analysis, level) {
-    let total = 0;
-    Object.keys(analysis).forEach(type => {
-        total += analysis[type][level].length;
-    });
-    return total;
-}
-
-// Function to generate interpretation text
-function generateInterpretation(analysis) {
-    const wordLevel = getTotalByLevel(analysis, 'word');
-    const phraseLevel = getTotalByLevel(analysis, 'phrase');
-    const sentenceLevel = getTotalByLevel(analysis, 'sentence');
-    const paragraphLevel = getTotalByLevel(analysis, 'paragraph');
     
-    const total = getTotalRevisions(analysis);
-    const wordPercent = Math.round((wordLevel / total) * 100) || 0;
-    const largerRevisions = sentenceLevel + paragraphLevel;
-    const largerPercent = Math.round((largerRevisions / total) * 100) || 0;
+    // Calculate statistics
+    analysis.statistics.totalChanges = additions.length + deletions.length;
+    analysis.statistics.netWordChange = analysis.statistics.totalWordsAdded - analysis.statistics.totalWordsDeleted;
     
-    let interpretation = '<div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">';
-    interpretation += '<h3 style="color: var(--primary-dark); margin-bottom: 15px;">Revision Pattern Analysis</h3>';
+    // Calculate revision patterns
+    calculateRevisionPatterns(analysis);
     
-    if (wordPercent > 60) {
-        interpretation += `<p><strong>Surface-level focus:</strong> ${wordPercent}% of revisions are at the word level, suggesting primarily surface editing rather than structural revision.</p>`;
-    } else if (largerPercent > 40) {
-        interpretation += `<p><strong>Substantial revision:</strong> ${largerPercent}% of revisions are at the sentence or paragraph level, indicating meaningful structural changes.</p>`;
-    } else {
-        interpretation += `<p><strong>Mixed approach:</strong> Revisions show a balance between surface editing and structural changes.</p>`;
+    // Calculate revision intensity
+    const totalText = tempDiv.textContent;
+    const unchangedText = totalText.replace(/<[^>]*>/g, '');
+    if (unchangedText.length > 0) {
+        const changedChars = Array.from(additions).reduce((sum, el) => sum + el.textContent.length, 0) +
+                           Array.from(deletions).reduce((sum, el) => sum + el.textContent.length, 0);
+        analysis.statistics.revisionIntensity = Math.round((changedChars / unchangedText.length) * 100);
     }
     
-    // Add recommendation based on Sommers' research
-    if (wordPercent > 60) {
-        interpretation += '<p style="margin-top: 10px;"><em>Consider: According to Nancy Sommers\' research, experienced writers focus more on structural and conceptual changes. Try reviewing your argument structure and paragraph organization in addition to word-level edits.</em></p>';
+    return analysis;
+}
+
+// Categorize revision by size
+function categorizeRevision(text) {
+    const wordCount = countWords(text);
+    
+    if (wordCount <= 2) return 'micro';
+    if (wordCount <= 10) return 'small';
+    if (wordCount <= 50) return 'medium';
+    if (wordCount <= 150) return 'large';
+    return 'massive';
+}
+
+// Count words accurately
+function countWords(text) {
+    const words = text.trim().match(/\b\w+(?:'\w+)?\b/g);
+    return words ? words.length : 0;
+}
+
+// Calculate revision patterns
+function calculateRevisionPatterns(analysis) {
+    const categories = ['micro', 'small', 'medium', 'large', 'massive'];
+    
+    // Count surface edits (micro changes)
+    analysis.patterns.surfaceEdits = 
+        analysis.additions.micro.length + analysis.deletions.micro.length;
+    
+    // Count substantive edits (small and medium)
+    analysis.patterns.substantiveEdits = 
+        analysis.additions.small.length + analysis.deletions.small.length +
+        analysis.additions.medium.length + analysis.deletions.medium.length;
+    
+    // Count structural changes (large and massive)
+    analysis.patterns.structuralChanges = 
+        analysis.additions.large.length + analysis.deletions.large.length +
+        analysis.additions.massive.length + analysis.deletions.massive.length;
+    
+    // Calculate balance score
+    const totalAdditions = categories.reduce((sum, cat) => sum + analysis.additions[cat].length, 0);
+    const totalDeletions = categories.reduce((sum, cat) => sum + analysis.deletions[cat].length, 0);
+    
+    if (totalDeletions > 0) {
+        analysis.patterns.balanceScore = (totalAdditions / totalDeletions).toFixed(2);
+    } else if (totalAdditions > 0) {
+        analysis.patterns.balanceScore = "∞"; // All additions, no deletions
+    } else {
+        analysis.patterns.balanceScore = "0";
+    }
+}
+
+// Generate enhanced table view with quantitative analysis
+function generateEnhancedTableView(analysis) {
+    const categories = [
+        { key: 'micro', label: 'Micro (1-2 words)', description: 'Punctuation, articles, minor adjustments' },
+        { key: 'small', label: 'Small (3-10 words)', description: 'Phrases, clarifications' },
+        { key: 'medium', label: 'Medium (11-50 words)', description: 'Sentences, substantial additions' },
+        { key: 'large', label: 'Large (51-150 words)', description: 'Paragraphs, major revisions' },
+        { key: 'massive', label: 'Massive (150+ words)', description: 'Multiple paragraphs, new sections' }
+    ];
+    
+    let html = `
+        <!-- Summary Statistics -->
+        <div class="stats-summary">
+            <div class="stat-card">
+                <div class="stat-number">${analysis.statistics.totalChanges}</div>
+                <div class="stat-label">Total Changes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" style="color: #2e7d32;">${analysis.statistics.totalWordsAdded}</div>
+                <div class="stat-label">Words Added</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" style="color: #c62828;">${analysis.statistics.totalWordsDeleted}</div>
+                <div class="stat-label">Words Deleted</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" style="color: ${analysis.statistics.netWordChange >= 0 ? '#2e7d32' : '#c62828'};">
+                    ${analysis.statistics.netWordChange > 0 ? '+' : ''}${analysis.statistics.netWordChange}
+                </div>
+                <div class="stat-label">Net Word Change</div>
+            </div>
+        </div>
+
+        <!-- Revision Patterns -->
+        <div style="margin: 30px 0; padding: 20px; background: #f0ecf8; border-radius: 8px;">
+            <h3 style="color: var(--primary-dark); margin-bottom: 15px;">Revision Patterns</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div>
+                    <strong>Surface Edits:</strong> ${analysis.patterns.surfaceEdits} changes<br>
+                    <small style="color: #666;">Minor word-level adjustments</small>
+                </div>
+                <div>
+                    <strong>Substantive Edits:</strong> ${analysis.patterns.substantiveEdits} changes<br>
+                    <small style="color: #666;">Meaningful phrase/sentence changes</small>
+                </div>
+                <div>
+                    <strong>Structural Changes:</strong> ${analysis.patterns.structuralChanges} changes<br>
+                    <small style="color: #666;">Major paragraph/section revisions</small>
+                </div>
+                <div>
+                    <strong>Add/Delete Ratio:</strong> ${analysis.patterns.balanceScore}<br>
+                    <small style="color: #666;">${interpretBalanceScore(analysis.patterns.balanceScore)}</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Breakdown Table -->
+        <h3 style="color: var(--primary-dark); margin: 20px 0 10px 0;">Detailed Breakdown</h3>
+        <table class="revision-table">
+            <thead>
+                <tr>
+                    <th>Revision Size</th>
+                    <th style="text-align: center;">Additions</th>
+                    <th style="text-align: center;">Deletions</th>
+                    <th style="text-align: center;">Total</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+    
+    let totalAdditions = 0;
+    let totalDeletions = 0;
+    
+    categories.forEach(cat => {
+        const additions = analysis.additions[cat.key].length;
+        const deletions = analysis.deletions[cat.key].length;
+        const rowTotal = additions + deletions;
+        
+        totalAdditions += additions;
+        totalDeletions += deletions;
+        
+        html += `
+            <tr>
+                <td class="row-label">${cat.label}</td>
+                <td style="text-align: center; color: #2e7d32; font-weight: 600;">${additions}</td>
+                <td style="text-align: center; color: #c62828; font-weight: 600;">${deletions}</td>
+                <td style="text-align: center; font-weight: 700;">${rowTotal}</td>
+                <td style="font-size: 0.85rem; color: #666;">${cat.description}</td>
+            </tr>
+        `;
+    });
+    
+    // Totals row
+    html += `
+        <tr class="total-row">
+            <td class="row-label"><strong>TOTAL</strong></td>
+            <td style="text-align: center; font-weight: 700; color: #2e7d32;">${totalAdditions}</td>
+            <td style="text-align: center; font-weight: 700; color: #c62828;">${totalDeletions}</td>
+            <td style="text-align: center; font-weight: 700;">${totalAdditions + totalDeletions}</td>
+            <td></td>
+        </tr>
+    `;
+    
+    html += '</tbody></table>';
+    
+    // Add interpretation
+    html += generateQuantitativeInterpretation(analysis);
+    
+    // Add word frequency analysis if significant
+    const wordFrequency = analyzeWordFrequency(analysis);
+    if (wordFrequency.length > 0) {
+        html += generateWordFrequencySection(wordFrequency);
+    }
+    
+    return html;
+}
+
+// Interpret balance score
+function interpretBalanceScore(score) {
+    if (score === "∞") return "Pure expansion (no deletions)";
+    if (score === "0") return "No changes detected";
+    const numScore = parseFloat(score);
+    if (numScore > 2) return "Heavy expansion";
+    if (numScore > 1.2) return "More adding than cutting";
+    if (numScore > 0.8) return "Balanced revision";
+    if (numScore > 0.5) return "More cutting than adding";
+    return "Heavy condensation";
+}
+
+// Generate quantitative interpretation
+function generateQuantitativeInterpretation(analysis) {
+    const totalChanges = analysis.statistics.totalChanges;
+    const surfacePercent = Math.round((analysis.patterns.surfaceEdits / totalChanges) * 100) || 0;
+    const substantivePercent = Math.round((analysis.patterns.substantiveEdits / totalChanges) * 100) || 0;
+    const structuralPercent = Math.round((analysis.patterns.structuralChanges / totalChanges) * 100) || 0;
+    
+    let interpretation = `
+        <div style="margin-top: 30px; padding: 25px; background: white; border-left: 4px solid var(--primary-color); border-radius: 8px;">
+            <h3 style="color: var(--primary-dark); margin-bottom: 15px;">📊 Quantitative Analysis</h3>
+    `;
+    
+    // Revision scope assessment
+    interpretation += '<p><strong>Revision Scope:</strong> ';
+    if (structuralPercent > 30) {
+        interpretation += `This revision shows <span style="color: var(--primary-color); font-weight: 600;">major structural changes</span> with ${structuralPercent}% of edits at the paragraph level or larger. This suggests significant reconceptualization or reorganization of ideas.`;
+    } else if (substantivePercent > 50) {
+        interpretation += `This revision is <span style="color: var(--primary-color); font-weight: 600;">substantially revised</span> with ${substantivePercent}% of changes at the phrase/sentence level, indicating meaningful content refinement without major structural overhaul.`;
+    } else if (surfacePercent > 60) {
+        interpretation += `This revision is <span style="color: var(--primary-color); font-weight: 600;">primarily surface-level</span> with ${surfacePercent}% micro-edits. Consider whether deeper structural or conceptual changes might strengthen the work.`;
+    } else {
+        interpretation += `This revision shows a <span style="color: var(--primary-color); font-weight: 600;">mixed approach</span> with balanced changes across different scales.`;
+    }
+    interpretation += '</p>';
+    
+    // Net change assessment
+    interpretation += '<p style="margin-top: 12px;"><strong>Content Evolution:</strong> ';
+    const netChange = analysis.statistics.netWordChange;
+    const percentChange = Math.abs(Math.round((netChange / (analysis.statistics.totalWordsDeleted || 1)) * 100));
+    
+    if (netChange > 100) {
+        interpretation += `The text <span style="color: #2e7d32; font-weight: 600;">expanded significantly</span> by ${netChange} words. This expansion suggests development of ideas, addition of evidence, or elaboration of arguments.`;
+    } else if (netChange < -100) {
+        interpretation += `The text was <span style="color: #c62828; font-weight: 600;">condensed significantly</span> by ${Math.abs(netChange)} words. This suggests focused editing for clarity and concision.`;
+    } else if (Math.abs(netChange) < 20) {
+        interpretation += `The text length remained <span style="color: var(--primary-color); font-weight: 600;">relatively stable</span> (${netChange > 0 ? '+' : ''}${netChange} words), suggesting refinement rather than expansion or reduction.`;
+    } else {
+        interpretation += `The text ${netChange > 0 ? 'grew' : 'shrank'} by <span style="font-weight: 600;">${Math.abs(netChange)} words</span>, a moderate change suggesting targeted revision.`;
+    }
+    interpretation += '</p>';
+    
+    // Revision style
+    interpretation += '<p style="margin-top: 12px;"><strong>Revision Style:</strong> ';
+    const balanceScore = analysis.patterns.balanceScore;
+    if (balanceScore === "∞" || parseFloat(balanceScore) > 3) {
+        interpretation += 'This appears to be an <span style="color: var(--primary-color); font-weight: 600;">additive revision</span>, building upon the existing text with minimal removal of content.';
+    } else if (parseFloat(balanceScore) < 0.5) {
+        interpretation += 'This appears to be a <span style="color: var(--primary-color); font-weight: 600;">reductive revision</span>, focusing on cutting and condensing rather than adding new material.';
+    } else {
+        interpretation += 'This represents a <span style="color: var(--primary-color); font-weight: 600;">transformative revision</span> with substantial both additions and deletions, suggesting significant reworking.';
+    }
+    interpretation += '</p>';
+    
+    // Sommers reference
+    if (surfacePercent > 60) {
+        interpretation += `
+            <div style="margin-top: 20px; padding: 15px; background: #fff8e1; border-radius: 5px;">
+                <strong>💡 Research Insight:</strong> According to Nancy Sommers' research, expert writers tend to make more structural and conceptual revisions compared to novices who focus on surface-level changes. 
+                With ${surfacePercent}% surface edits in this revision, consider reviewing the overall argument structure and paragraph organization for potential deeper improvements.
+            </div>
+        `;
     }
     
     interpretation += '</div>';
     return interpretation;
 }
+
+// Analyze word frequency in changes
+function analyzeWordFrequency(analysis) {
+    const wordCounts = {};
+    const categories = ['small', 'medium', 'large', 'massive'];
+    
+    // Count word frequency in additions
+    categories.forEach(cat => {
+        analysis.additions[cat].forEach(item => {
+            const words = item.text.toLowerCase().match(/\b\w+(?:'\w+)?\b/g) || [];
+            words.forEach(word => {
+                if (word.length > 4) { // Only count substantial words
+                    wordCounts[word] = (wordCounts[word] || 0) + 1;
+                }
+            });
+        });
+    });
+    
+    // Sort and return top recurring terms
+    return Object.entries(wordCounts)
+        .filter(([word, count]) => count > 2)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 10);
+}
+
+// Generate word frequency section
+function generateWordFrequencySection(wordFrequency) {
+    if (wordFrequency.length === 0) return '';
+    
+    let html = `
+        <div style="margin-top: 25px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+            <h3 style="color: var(--primary-dark); margin-bottom: 15px;">🔤 Key Terms in Revisions</h3>
+            <p style="margin-bottom: 10px; color: #666;">Frequently added or modified terms (may indicate focus areas):</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+    `;
+    
+    wordFrequency.forEach(([word, count]) => {
+        html += `
+            <span style="
+                background: white;
+                padding: 5px 12px;
+                border-radius: 20px;
+                border: 1px solid var(--primary-color);
+                color: var(--primary-dark);
+                font-size: 0.9rem;
+            ">
+                <strong>${word}</strong> (${count}×)
+            </span>
+        `;
+    });
+    
+    html += '</div></div>';
+    return html;
+}
+
+// Update the main generateTableView function to use the enhanced version
+function generateTableView(analysis) {
+    return generateEnhancedTableView(analysis);
+}
+
+// Also enhance the detailed view
+function generateDetailedView(analysis) {
+    let html = '<div class="detail-list">';
+    
+    const categories = [
+        { key: 'micro', label: 'Micro Changes', class: 'micro' },
+        { key: 'small', label: 'Small Changes', class: 'small' },
+        { key: 'medium', label: 'Medium Changes', class: 'medium' },
+        { key: 'large', label: 'Large Changes', class: 'large' },
+        { key: 'massive', label: 'Massive Changes', class: 'massive' }
+    ];
+    
+    const types = [
+        { key: 'additions', label: 'Additions', class: 'addition' },
+        { key: 'deletions', label: 'Deletions', class: 'deletion' }
+    ];
+    
+    types.forEach(type => {
+        let typeHtml = `<div class="revision-category">
+            <div class="category-title">${type.label}</div>`;
+        let hasContent = false;
+        
+        categories.forEach(cat => {
+            const items = analysis[type.key][cat.key];
+            if (items.length > 0) {
+                hasContent = true;
+                typeHtml += `
+                    <h4 style="margin-top: 15px; color: var(--primary-dark);">
+                        ${cat.label} (${items.length} changes, ${items.reduce((sum, item) => sum + item.wordCount, 0)} words)
+                    </h4>
+                `;
+                
+                // Show first 3 examples of each category
+                items.slice(0, 3).forEach(item => {
+                    typeHtml += `
+                        <div class="revision-item ${type.class}" style="margin: 10px 0;">
+                            <div class="revision-text">
+                                "${item.text.substring(0, 150)}${item.text.length > 150 ? '...' : ''}"
+                            </div>
+                            <div style="font-size: 0.8rem; color: #666; margin-top: 5px;">
+                                ${item.wordCount} words, ${item.charCount} characters
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                if (items.length > 3) {
+                    typeHtml += `<p style="color: #666; font-style: italic;">... and ${items.length - 3} more ${cat.label.toLowerCase()}</p>`;
+                }
+            }
+        });
+        
+        typeHtml += '</div>';
+        
+        if (hasContent) {
+            html += typeHtml;
+        }
+    });
+    
+    html += '</div>';
+    return html;
+}
+
+
 
 // Replace the existing generateRevisionReport function with this updated version:
 function generateRevisionReport() {
